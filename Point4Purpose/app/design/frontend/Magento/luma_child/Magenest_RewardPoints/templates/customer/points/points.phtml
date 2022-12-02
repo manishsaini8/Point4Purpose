@@ -131,7 +131,9 @@ $availPoint = 0;
 
 
 <div class="reard-info">
-    <div class="reward-points-description"><?php echo $block->getDescription(); ?></div>
+    <div class="reward-points-description"><?php echo $block->getDescription(); ?>
+	<br><span style="font-weight: bold;position: relative;top: 8px;">Note: 1 point equal to 1 cent</span>
+	</div>
     <?php
     if (empty($block->getDescription())) {
         echo $block->getLandingPageLink();
