@@ -1,0 +1,190 @@
+<?php
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+
+/** @var  $block \Magenest\RewardPoints\Block\Customer\Points */
+
+$customer = $objectManager->create('\Magenest\RewardPoints\Block\Customer\Points');
+$availPoint = 0;
+$_donation = $customer->getDonation();
+$availPoint = $customer->getAccount()->getPointsCurrent() - $_donation;
+
+
+/*$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => 'https://api.pokitpal.com/v1/Banks/?region=au',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+]);
+
+$responseBank = curl_exec($curl);
+$err = curl_error($curl);
+curl_close($curl);*/
+?>
+<style>
+    h2.bank-add{
+        font-size: 18px;
+        font-weight: 500;
+    }
+</style>
+<form id="form-validate" class="withdraw-form">
+    <fieldset class="fieldset">
+        <div class="back-url"><a href="<?= $this->getUrl('rewardpoints/customer/points');?>">Back</a></div>
+    <div class="mgs"></div>
+    <h2 class="bank-add">Add Bank Details</h2>
+
+        <div class="field required">
+            <label for="password-confirmation" class="label">
+                <span><?= $escaper->escapeHtml(__('Account Number')) ?></span>
+            </label>
+            <div class="control">
+                <input type="hidden" id="countryCode" name="countryCode" value="au">
+                <input type="number" id="cardnumber" class="input-text required-entry validate-length maximum-length-16 minimum-length-16 validate-digits"
+                       name="cardnumber" value="" data-validate="{required:true}" required>
+                <span class="card-error" style="display: none;color: red;">Invalid Account Number</span>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="password-confirmation" class="label">
+                <span><?= $escaper->escapeHtml(__('BSB Number')) ?></span>
+            </label>
+            <div class="control">
+                <input type="number" id="bsb" class="input-text required-entry validate-length maximum-length-8 minimum-length-8 validate-digits"
+                       name="bsb" value="" data-validate="{required:true}" required>
+                <span class="expm-error" style="display: none;color: red;">Invalid BSB Number</span>
+            </div>
+        </div>
+        <div class="field required">
+            <label for="password-confirmation" class="label">
+                <span><?= $escaper->escapeHtml(__('Withdrawal Amount (Enter amount in dollars)')) ?></span>
+            </label>
+            <div class="control">
+                <input type="number" id="amount" class="input-text required-entry validate-length maximum-length-8 minimum-length-8 validate-digits"
+                       name="amount" value="" data-validate="{required:true}" required>
+                <span class="amt-error" style="display: none;color: red;">Invalid Amount</span>
+            </div>
+        </div>
+
+    <div class="primary card">
+            <span class="action submit primary"
+                  id="withdraw"
+                  title="<?= $escaper->escapeHtmlAttr(__('Withdraw')) ?>">
+                <span><?= $escaper->escapeHtml(__('Withdraw')) ?></span>
+            </span>
+    </div></fieldset></form>
+	
+<?php
+ $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+ $withdraw_limit = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/set_withdraw_limit');
+		if($withdraw_limit != ''){
+			$withdraw_limit = $withdraw_limit;
+		}else{
+			$withdraw_limit = 3000;	
+		}
+		?>
+	
+	
+	
+<div id="popup-modal" style="display:none;">
+    <p class="pp"> Insufficient Funds!</p>
+    <br/>
+    <p class="pp">Your 'Available Points' must reach <?php echo $withdraw_limit; ?> to be able to withdraw.
+    </p>
+</div>
+<script type="text/javascript">
+
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false
+            };
+
+            var popup = modal(options, $('#popup-modal'));
+            $("#withdraw").on('click',function(){
+
+                var wamount = '<?php echo $availPoint;?>'
+                if(wamount < <?php echo $withdraw_limit; ?>){
+                        $("#popup-modal").modal("openModal");
+                        return  false;
+                    }
+
+                    var accNumber = $('#cardnumber').val().length;
+                    var bsb = $('#bsb').val().length;
+                    var amt = $('#amount').val().length;
+
+                    var  amount = $('#amount').val();
+                    if(accNumber === 0 || accNumber > 10 || accNumber < 5 ){
+                        // console.log(cardNumber);
+                        $('.card-error').show();
+                        return false;
+                    }else{
+                        $('.card-error').hide();
+                    }
+
+                    if(bsb === 0 || bsb > 10 || bsb < 6){
+                        $('.expm-error').show();
+                        return false;
+                    }else{
+                        $('.expm-error').hide();
+                    }
+
+
+                    if(amt === 0 || amt > 5 ){
+                        $('.amt-error').show();
+                        return false;
+                    }else{
+                        $('.amt-error').hide();
+                    }
+
+                    if(amount == '0' ||  amount == '00' ||  amount == '000'){
+                        $('.amt-error').show();
+                        return false;
+                    }else{
+                        $('.amt-error').hide();
+                    }
+
+                    $.ajax({
+                        url: "<?php echo $this->getBaseUrl().'rewardpointscoupon/check/bankadd'?>",
+                        data: $('#form-validate').serialize(),
+                        type: 'POST',
+                        showLoader: true,
+                        success: function(data, status, xhr) {
+                            $('.mgs').empty();
+                            if (data.status === 'error') {
+                                $('.mgs').append('<div class="message error">'+data.message+'<div>');
+                            }else{
+                                $('#form-validate').trigger("reset");
+                                $('.mgs').append('<div class="message success">'+data.message+'<div>');
+								 window.location.href = window.location.origin +"/rewardpoints/customer/points/";
+                            }
+                        },
+                        error: function (xhr, status, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+
+                });
+
+            });
+
+</script>
