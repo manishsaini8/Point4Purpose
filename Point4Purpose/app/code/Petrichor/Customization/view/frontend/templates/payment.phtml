@@ -1,0 +1,540 @@
+<style type="text/css">
+ .cardscontent img {
+    max-width: 60px;
+    height: auto;
+    border: 0;
+}
+#anchorid  form> div:last-child {
+      display:none !important;
+    } 
+</style>
+
+<?php
+//error_reporting(E_ERROR);
+$host = $_SERVER['SERVER_NAME'];
+
+if($host == 'm2.points4purpose.com.au')
+{
+}
+?>
+<?php
+
+	$objm = \Magento\Framework\App\ObjectManager::getInstance();
+ $customerSession = $objm->get('Magento\Customer\Model\Session');
+
+$customerID = $customerSession->getCustomer()->getId();
+ $cToken = $customerSession->getCustomer()->getCardToken();
+
+if (isset($_GET['del'])){
+$delthiscard = $_GET['del'];
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.pokitpal.com/v1/DebitCards/Remove/?cardid=$delthiscard",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "DELETE",
+    CURLOPT_HTTPHEADER => [
+        "Content-Type: application/json",
+        "Authorization: Bearer $cToken"
+    ],
+]);
+
+$delresponse = curl_exec($curl);
+
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+    $page =  $_SERVER['HTTP_REFERER'];
+    header("location:$page");
+  //header('Location: https://points4purpose.com.au/customization/points4purpose/payment/'); exit;
+}
+}
+
+$addressId = 1;
+if ($addressId){
+}
+
+$curl = curl_init();
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.pokitpal.com/v1/DebitCards",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+    CURLOPT_HTTPHEADER => [
+        "Content-Type: application/json",
+        "Authorization: Bearer $cToken"
+    ],
+]);
+
+$cardslist = curl_exec($curl);
+//echo "<pre>";
+//print_r($cardslist);
+//echo "</pre>";
+$err = curl_error($curl);
+echo $err;
+
+curl_close($curl);
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => 'https://api.pokitpal.com/v1/Banks/?region=au',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+]);
+
+$responseBank = curl_exec($curl);
+$err = curl_error($curl);
+curl_close($curl);
+
+?>
+<style>
+
+.close-button {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+display: flex;
+-webkit-box-align: center;
+align-items: center;
+-webkit-box-pack: center;
+justify-content: center;
+width: 23px;
+height: 23px;
+position: absolute;
+z-index: 1;
+top: 15px;
+right: 15px;
+cursor: pointer;}
+.card-item {
+      display: inline-block;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+box-sizing: border-box;
+border-radius: 10px;
+background-image: linear-gradient(180deg,#abaeaf,#575b5c);
+padding: 25px;
+color: #fff;
+margin-bottom: 30px;
+width: 328px;
+height: 187px;
+position: relative;
+}
+.mc-icon,.v-icon{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+border-style: none;
+vertical-align: middle;
+width: 45px;
+}
+.card-number {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+display: flex;
+-webkit-box-align: center;
+align-items: center;
+font-size: 18px;
+line-height: 1.4;
+margin-bottom: 16px;
+font-weight: 200;}
+.card-wrap {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+margin-bottom: 28px;
+padding-top: 58px;}
+.card-label {
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+font-size: 7px;
+line-height: 1.4;
+display: block;
+margin-bottom: 5px;
+letter-spacing: 1.4px;
+text-transform: uppercase;
+font-weight: 400;
+}
+.symbol {
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+visibility: visible;
+color: #fff;
+font-size: 18px;
+line-height: 1.4;
+font-weight: 600;
+box-sizing: border-box;
+margin-right: 10px;
+}
+
+.row-center {
+  text-align:center;
+}
+@media (max-width:999px){
+.col-center {
+  display:inline-block;
+  float:none;
+  text-align:center;
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
+        text-align: center;
+}
+}
+</style>
+
+<?php
+if ($err) {
+  echo "cURL sError #:" . $err;
+} else {
+    $cardslist = json_decode($cardslist,true);
+
+    if(!empty($cardslist)) {
+
+echo "<div class='crd'>";
+        foreach ($cardslist['cards'] as $i_value) {
+//    $dateex = date('Y-m-d', strtotime($i_value->dateAdded));
+
+            echo "
+			<div class='col-md-6 col-centered'>
+<div class='card-item'>
+		<span class='close-button'>
+			<a href='?del=" . $i_value['id'] . "'>
+			<img _ngcontent-serverapp-c139='' src='/assets/img/settings/close-icon.svg' />
+			</a>
+		</span>
+		<div _ngcontent-serverapp-c139='' class='logo'><!---->
+			<img src=";
+						// echo $firstsix;
+						if ($i_value['issuer'] === 'mastercard') {
+							echo " '/assets/img/in-store/mastercard-icon.png' ";
+						}
+						if ($i_value['issuer'] === 'visa')
+							{
+								echo "/assets/img/in-store/visa.png";
+							}
+							echo " class='mc-icon' />
+ <!----></div>
+		<div _ngcontent-serverapp-c139='' class='card-wrap'>
+		  <div _ngcontent-serverapp-c139='' class='card-number'>
+			<span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span>
+			<span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span>
+			<span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span>
+			<span _ngcontent-serverapp-c139='' class='txt'>" . $i_value['lastFour'] . "</span>
+		  </div>
+		</div>
+		<div _ngcontent-serverapp-c139='' class='card-date'>
+		  <label _ngcontent-serverapp-c139='' class='card-label'></label>
+		 </div>
+		<div>" . $i_value['provider'] . "</div>
+	 </div>
+	 </div>";
+           // }
+        }
+        echo "</div>";
+		
+    }
+
+}
+
+echo "<div style='clear:both'></div>";
+
+if (empty($cardslist)) {
+echo "<center><h2 style='
+    font-size: 20px;max-width: 600px;
+'>Link your card and earn cash rewards whenever you shop! <br>Securely link your Visa or Mastercard credit or debit cards to your account and you’ll earn cashback automatically whenever you use your chosen card to pay at participating shops, cafes and restaurants.</h2></center>";
+}else{
+	if (empty($cardslist['cards'])) {
+		echo "<center><h2 style='
+    font-size: 20px;max-width: 600px;
+'>Please link your card first and earn cash rewards whenever you shop! <br>Securely link your Visa or Mastercard credit or debit cards to your account and you’ll earn cashback automatically whenever you use your chosen card to pay at participating shops, cafes and restaurants.</h2></center>";
+	 echo "<h2>Link card</h2>";
+	}else{
+  echo "<h2>Link another card</h2>";
+	}
+        } ?>
+        <form id="form-validate">
+            <div class="mgs"></div>
+   <div class="payment-sec">
+            <div class="field">
+                <label for="password-confirmation" class="label">
+                    <span><?= $escaper->escapeHtml(__('Card Number')) ?></span>
+    </label>
+    <div class="control">
+        <input type="hidden" id="is_loggedin" name="is_loggedin" value="1">
+        <input type="hidden" id="card_token" name="card_token" value="<?= $cToken;?>">
+        <input type="text" maxlength="16" id="cardnumber" class="input-text required-entry validate-length maximum-length-16 minimum-length-16 validate-digits"
+               name="cardnumber" value="" data-validate="{required:true}" required>
+        <span class="card-error" style="display: none;color: red;">Invalid Card Number</span>
+    </div>
+    </div>
+    <div class="exp" style="display: flex">
+        <div class="field">
+            <label for="password-confirmation" class="label">
+                <span><?= $escaper->escapeHtml(__('Card Expiry Month')) ?></span>
+            </label>
+            <div class="control">
+                <input type="number" id="cardexpirymonth"  class="input-text required-entry validate-length maximum-length-2 minimum-length-2 validate-digits"  name="cardexpirymonth" value="" data-validate="{required:true}" required>
+                <span class="info">eg. 05</span>
+                <span class="expm-error" style="display: none;color: red;">Invalid Card Month</span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="password-confirmation" class="label">
+                <span><?= $escaper->escapeHtml(__('Card Expiry Year')) ?></span>
+            </label>
+            <div class="control">
+                <input type="number" id="cardexpiryyear" name="cardexpiryyear" value="" class="input-text required-entry validate-length maximum-length-2 minimum-length-2 validate-digits" data-validate="{required:true}" required>
+                <span class="info">Last 2 digits eg. 23 (year : 2023)</span>
+                <span class="expy-error" style="display: none;color: red;">Invalid Card Year</span>
+            </div>
+        </div>
+
+    </div>
+
+    <?php
+    if(empty($err)){
+    $banks = json_decode($responseBank, true);
+    if (!empty($banks) && count($banks) > 0) { ?>
+    <div class="field">
+        <label for="password-confirmation" class="label">
+            <span><?= $escaper->escapeHtml(__('Select Bank')) ?></span>
+        </label>
+        <div class="control">
+            <select name="bank" class="form-select">
+                <?php foreach ($banks['banks'] as $bnk){ ?>
+                    <option value="<?= $bnk['id'] ?>"><?= $bnk['name'] ?></option>
+                <?php }?>
+            </select>
+        </div>
+    </div>
+    <?php }} ?>
+    </div>
+    <div class="primary card">
+            <span class="action submit primary"
+                  id="card_form"
+                  title="<?= $escaper->escapeHtmlAttr(__('Register')) ?>">
+                <span><?= $escaper->escapeHtml(__('Register')) ?></span>
+            </span>
+    </div>
+	</form>
+<?php
+
+echo "<p></p></center>
+<div id=anchorid class=cardscontent style='display: none'></div>";
+
+?>
+<style>
+    .logoleft{
+      width:45px;
+      float:  left;
+      posiion:absolute;
+    }
+    .cctx
+    {
+      font-size: 18px;
+      color: #777777;
+    }
+    .cctxadded
+    {
+      font-size: 14px;
+      color: #777777;
+    }
+    .cctxdollars
+    {
+      font-size: 18px;
+      color: black;
+    }
+    .cardscontent, .cardscontent div {
+    margin: 0 auto;
+  
+}
+
+.cardslist {background: #f0f0f0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 6px;
+    border-radius: 8px;}    
+
+    #anchorid p:last-child {
+      display: none;
+    }
+    #anchorid form + span {
+      display: none;
+    }
+
+    </style>
+
+
+
+    <script type="text/javascript">
+        require([
+            "jquery",
+        ],function($) {
+            $(document).ready(function() {
+				 
+                $('#card_form').click(function() {
+                    var cardNumber = $('#cardnumber').val().length;
+                    var cardMn = $('#cardexpirymonth').val().length;
+                    var cardYr = $('#cardexpiryyear').val().length;
+
+                    var cardMonth = $('#cardexpirymonth').val();
+                    var cardYear = $('#cardexpiryyear').val();
+                    
+                    if(cardNumber === 0 || cardNumber > 16 || cardNumber < 16){
+                        // console.log(cardNumber);
+                        $('.card-error').show();
+                        return false;
+                    }else{
+                        $('.card-error').hide();
+                    }
+
+                    if(cardMn === 0 || cardMn > 2 || cardMn < 2){
+                        $('.expm-error').show();
+                        return false;
+                    }else{
+                        $('.expm-error').hide();
+                    }
+
+                    if(cardMonth > 12 || cardMonth == '00'){
+                        $('.expm-error').show();
+                        return false;
+                    }else{
+                        $('.expm-error').hide();
+                    }
+
+                    if(cardYr === 0 || cardYr > 2 || cardYr < 2){
+                        $('.expy-error').show();
+                        return false;
+                    }else{
+                        $('.expy-error').hide();
+                    }
+
+                    if(cardYear <= 21 || cardYear > 50 || cardMonth == '00'){
+                        $('.expy-error').show();
+                        return false;
+                    }else{
+                        $('.expy-error').hide();
+                    }
+
+                    $.ajax({
+                        url: "<?php echo $this->getBaseUrl().'rewardpointscoupon/check/cardregister'?>",
+                        data: $('#form-validate').serialize(),
+                        type: 'POST',
+                        //dataType: 'json',
+                        showLoader: true,
+                        success: function(data, status, xhr) {
+                            if (data.status === 'error') {
+                                $('.mgs').append('<div class="message error">'+data.message+'<div>');
+                            }else{
+                                var img = data.card.issuer;
+                                var issuer = '';
+                                if(img === 'visa'){
+                                    var issuer = "/assets/img/in-store/visa.png";
+                                }
+                                if(img === 'mastercard'){
+                                    var issuer = "/assets/img/in-store/mastercard-icon.png";
+                                }
+                                var cardBind = "<div class='col-md-6 col-centered'>"+
+                                    "<div class='card-item'><span class='close-button'><a href='?del="+data.card.id+"'><img _ngcontent-serverapp-c139='' src='/assets/img/settings/close-icon.svg'></a></span><div _ngcontent-serverapp-c139='' class='logo'>"+
+                                    "<img src="+issuer+" class='mc-icon'/></div>"+
+                                    "<div _ngcontent-serverapp-c139='' class='card-wrap'>"+
+                                    "<div _ngcontent-serverapp-c139='' class='card-number'>" +
+                                    "<span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span><span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span>"+
+                                    "<span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span><span _ngcontent-serverapp-c139='' class='txt'>"+data.card.lastFour+"</span></div></div>"+
+                                    "<div _ngcontent-serverapp-c139='' class='card-date'><label _ngcontent-serverapp-c139='' class='card-label'></div><div>"+data.card.provider+"</div></div></div>";
+                                $('.mgs').html('<div class="message success">'+data.message+'<div>');
+                                $('div.crd').append(cardBind);
+
+                                $("#form-validate").trigger('reset');
+
+                            }
+                        },
+                        error: function (xhr, status, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+                })
+            })
+
+        });
+
+    </script>
