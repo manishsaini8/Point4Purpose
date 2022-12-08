@@ -1,0 +1,734 @@
+
+<?php
+    $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();        
+    $storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+    $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+    $storeID       = $storeManager->getStore()->getStoreId(); 
+    $storeName     = $storeManager->getStore()->getName();
+    $customerData = $customerSession->getCustomer();
+    
+  //  echo $customerSession->getData('selected_charity');
+
+   //   echo  $storeName.$customerData->getData('selected_charity')."fdsfdsfsdfsdfds";
+//            echo '<style>.otherchars{dispaly:none!important;}</style>';
+              if ($customerData->getData('selected_charity') == "No Kid Hungry"){
+         //   echo  $customerData->getData('selected_charity');
+            echo '<style>.othercharsa{dispaly:none!important;}</style>';
+      }
+
+    if($customerSession->isLoggedIn()) {
+      if ( $customerData->getData('selected_charity') == "No Kid Hungry"){
+          echo  $customerData->getData('selected_charity');
+            echo '<style>.otherchars{dispaly:none!important;}<\style>';
+      }
+ 
+          
+    }
+?>
+
+<?php
+$host = $_SERVER['SERVER_NAME'];
+?>
+<style>
+
+.nav.item {
+    list-style-type: none;
+}
+
+</style>
+
+
+
+<?php
+
+
+if($host == 'aab.points4purpose.com.au')
+{
+  //echo 'XXXXXXXXXXXXXXXXXX';
+?>
+
+<style type="text/css">
+  /* JOJ custom style */
+  .nav-sections{display: none;}
+
+  .aab-header{background-color:#000000; padding:15px 0; width:100%; color:#FFFFFF; border-top:2px solid #333333;}
+  .aab-inner{width:1100px; margin: 0 auto;}
+  .aab-hnav{display: inline-block;}
+  .aab-hnav-logo{width:35%; font-family: 'Roboto'; font-size: 36px; font-weight: bold; letter-spacing: 3px; vertical-align: middle;}
+  .aab-hnav-logo a{color:#FFFFFF; text-decoration: none;}
+  .aab-hnav-nav{width:60%; text-align: right; vertical-align: middle;}
+  .aab-hnav-nav ul{list-style:none; margin: 0; padding: 0;}
+  .aab-hnav-nav li{display: inline-block; padding-right: 15px; padding-left: 15px; margin-bottom: 0;}
+  .aab-hnav-nav li a{color:#FFFFFF; line-height: 20px; font-size: 16px; font-family: 'Roboto';}
+</style>
+
+<div class="aab-header">
+  <div class="aab-inner">
+    <div class="aab-hnav aab-hnav-logo"><a href="https://aab.points4purpose.com.au/">AAB</a></div>
+    <div class="aab-hnav aab-hnav-nav">
+      <ul>
+        <li><a href="https://aab.points4purpose.com.au/aab-new-about">About Us</a></li>
+        <li><a href="https://aab.points4purpose.com.au/rewards-shop.html">Shop</a></li>
+        <li><a href="https://m2.points4purpose.com.au/rewardpointscoupon/check/">Redeem Voucher</a></li>
+        <li><a href="https://m2.points4purpose.com.au/customer/account/login/">Sign in</a></li>
+        <li><a href="https://m2.points4purpose.com.au/#">Register</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<?php
+  }
+elseif ($host == 'inclusivegyms.points4purpose.com.au') {
+  ?>
+
+<style type="text/css">
+  /* JOJ custom style */
+  .nav-sections{display: none;}
+
+  .aab-header{background-color:#000000; padding:15px 0; width:100%; color:#FFFFFF; border-top:2px solid #333333;}
+  .aab-inner{width:1100px; margin: 0 auto;}
+  .aab-hnav{display: inline-block;}
+  .aab-hnav-logo{width:35%; font-family: 'Roboto'; font-size: 36px; font-weight: bold; letter-spacing: 3px; vertical-align: middle;}
+  .aab-hnav-logo a{color:#FFFFFF; text-decoration: none;}
+  .aab-hnav-nav{width:60%; text-align: right; vertical-align: middle;}
+  .aab-hnav-nav ul{list-style:none; margin: 0; padding: 0;}
+  .aab-hnav-nav li{display: inline-block; padding-right: 15px; padding-left: 15px; margin-bottom: 0;}
+  .aab-hnav-nav li a{color:#FFFFFF; line-height: 20px; font-size: 16px; font-family: 'Roboto';}
+</style>
+
+<div class="aab-header">
+  <div class="aab-inner">
+    <div class="aab-hnav aab-hnav-logo"><a href="https://inclusivegyms.points4purpose.com.au/">Inclusive Gyms</a></div>
+    <div class="aab-hnav aab-hnav-nav">
+      <ul>
+        <li><a href="https://inclusivegyms.points4purpose.com.au/inclusivegyms-about">About Us</a></li>
+        <li><a href="https://inclusivegyms.points4purpose.com.au/rewards-shop.html">Shop</a></li>
+        <li><a href="https://m2.points4purpose.com.au/rewardpointscoupon/check/">Redeem Voucher</a></li>
+        <li><a href="https://m2.points4purpose.com.au/customer/account/login/">Sign in</a></li>
+        <li><a href="https://m2.points4purpose.com.au/#">Register</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<?php
+  }else{
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+
+
+
+
+
+ $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+ if($isLoggedIn) 
+ {
+
+  //echo 'heywssssssssssssddd ';
+// echo   $customerSession->getCustomer()->getCustomAttribute('selected_charity')->getValue();
+//print_r($customerSession->getCustomer());
+//echo $customerSession->getCustomer()->getCustomAttribute('selected_charity')->getValue(); //get all data of customerData
+//var_dump($customerData);
+//$atts= $customerSession->getCustomer(); 
+//var_dump($atts);
+// echo $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'selected_charity');
+ // use your custom attribute name to get the value.
+ 
+ //$customer = $this->customerRepository->getById($customerId);
+ //echo $customerId;
+ 
+ //echo "X--".$customerSession->getCustomer()->getId()."--X"; //Get Current customer ID
+        $customerData = $customerSession->getCustomer(); //Get Current Customer Data
+        // echo '<style>.otherchars{display:none!important;}</style>';
+        //echo $customerData->getData('selected_charity');
+      //  print_r($customerData->getData());\
+                 if (strpos($customerData->getData('selected_charity'), "No Kid Hungry")){
+          // echo  $customerData->getData('selected_charity');
+            echo '<style>.otherchars{display:none!important;}</style>';
+      }
+
+
+ }
+ ?>
+
+
+
+
+
+
+
+<?php
+  }
+if ($host == 'chadstone.points4purpose.com.au') {
+  ?>
+
+<style>
+      
+@font-face {
+  font-family: Primary;
+  font-weight: normal;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3bf7f1daaf/gotham-medium.woff') format('woff'), url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3b8b26bc49/gotham-medium.ttf') format('truetype'), url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/0cc84848b0/gotham-medium.eot?#iefix') format('embedded-opentype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 100;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/a78707b395/gotham-light.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 100;
+  font-style: italic;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3da8560271/gotham-lightitalic-1.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 700;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/955ab6775f/gotham-bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 700;
+  font-style: italic;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/786e65e409/gotham-bolditalic.ttf') format('truetype');
+}
+      
+@font-face {
+  font-family: Secondary;
+  font-weight: normal;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/bd210f543f/helvetica-neue-md.ttf') format('truetype');
+}
+@font-face {
+  font-family: Secondary;
+  font-weight: 100;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/65dc6addf4/helvetica-neue-ultlt.ttf') format('truetype');
+}
+    </style>
+
+
+<style type="text/css">
+
+.nav.items ul > li:last-child, .nav.items ul > li:nth-last-child(2){
+  display: none!importand;
+}
+
+ul.nav li:last-child {
+  background-color: red!important;
+  display: none!important;
+}
+
+
+  /* JOJ custom style */
+  .nav-sections{display: none;}
+
+  .cs-nav{background-color:#262525; margin-bottom: 25px;}
+  .cs-acc{background-color:#C8102E; color: #e9e9e9; text-align: center; font-size: 15px; font-family: 'news-gothic-std', 'helvetica-neue', arial, sans-serif; padding: 8px;}
+  .cs-acc a{color: #e9e9e9;text-decoration: none;}
+  .cs-acc a:hover{color:#FFFFFF;}
+  .cs-logo{margin-right: 0; margin-left: 0; position: relative; padding: 20px 0;}
+  .cs-logo a{color:#b0aeae; font-size: 12px; font-weight: 600; text-decoration: underline; font-family: sans-serif;}
+  .cs-logo a:hover{text-decoration: none;}
+  .cs-logo-left{position: absolute; top: 0; left: 0; padding: 20px; margin-top: 2px}
+  .cs-logo-mid{text-align: center; width: 100%;}
+  .cs-logo-mid img{max-width: 150px;}
+  .cs-logo-right{position: absolute; top: 0; right: 0; padding: 20px; margin-top: 2px;}
+  .cs-mnav{position: relative;}
+  .cs-mnav ul{margin: 0; padding: 0; list-style: none; text-align: center;}
+  .cs-mnav li{display: inline-block; padding: 0px 20px 14px 20px; margin-bottom: 0;}
+  .cs-mnav li a{color:#b0aeae; font-family: 'Primary'; text-transform: uppercase; line-height: 18px; font-size: 12px; font-weight: 100;}
+  .cs-chkout{position: absolute; top: -15px; right: 25px;}
+  .cs-chkout a img{height: 40px;}
+
+  .cs-sidenav{  height: 100%; width: 0; position: fixed; z-index: 999; top: 0; left: 0; background-color: #000000; overflow-x: hidden; transition: 0.5s;}
+  .cs-tnav{margin: 0; padding: 0 0 0 20px; list-style: none;}
+  .cs-tnav li{width: 100%;}
+  .cs-tnav li a{color:#e9e9e9; font-family: 'TradeGothicLTCondEighteen'; text-transform: uppercase; line-height: 18px; font-size: 18px; letter-spacing: 1px; font-weight: bold;}
+  .cs-sidenav-top{position: relative; padding: 30px 25px;}
+  .cs-sidenav-top a{color: #e9e9e9; font-size: 12px; font-weight: bold;}
+  .cs-sidenav-top a:hover{text-decoration: none;}
+  .cs-sidenav-ltop{position: absolute; top: 5px; left: 15px;}
+  .cs-sidenav-rtop{position: absolute; top: 20px; right: 15px;}
+  .cs-mobloc{background-color: #333333; padding: 20px; margin-bottom: 25px;}
+  .cs-mobloc a{text-decoration: underline; color: #e9e9e9; font-size: 15px; font-family: 'TradeGothicLTCondEighteen';}
+  .cs-slidesoc{text-align: center; margin-top: 75px;}
+  .cs-slidesoc a{color: #e9e9e9; font-size: 28px; margin-left: 10px; margin-right: 10px;}
+
+  @media (max-width:1024px){
+    .cs-fyf{display: none;}
+    .cs-logo-right{display: none;}
+    .cs-mnav ul{display: none;}
+    .cs-chkout{top:-75px;}
+    .cs-navtoggle{background:none; border: none; margin-top: 5px;}
+    .cs-navtoggle:hover, .cs-navtoggle:focus{background: none; border: none;}
+    .cs-navtoggle span {background: #e9e9e9; height: 3px; width: 24px; display: block; margin-bottom: 5px;}
+  }
+
+  @media (min-width:1025px){
+    .cs-sidenav{display: none;}
+    .cs-navtoggle{display: none;}
+  }
+</style>
+
+<script>
+function openNav() {
+  document.getElementById("mnavtoggle").style.width = "300px";
+}
+
+function closeNav() {
+  document.getElementById("mnavtoggle").style.width = "0";
+}
+</script>
+
+<div class="cs-nav">
+
+  <div class="cs-logo">
+    <div class="cs-logo-left">
+      <a href="https://www.chadstone.com.au/shopping/plan-my-journey" class="cs-fyf"><i class="fa fa-star-o" aria-hidden="true"></i>&nbsp;Plan your journey</a>
+      <button type="button" class="navbar-toggle cs-navtoggle" id="slide-nav" onclick="openNav()">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="cs-logo-mid">
+      <a href="/"><img src="/wlchad/chadstone-logo-light.svg" /></a>
+    </div>
+    <div class="cs-logo-right">
+      <a href="/customer/account/login/"></a>
+    </div>
+  </div>
+  <div class="cs-mnav">
+    <ul>
+      <li><a href="https://www.chadstone.com.au/christmas">CHRISTMAS
+</a></li>
+      <li><a href="https://www.chadstone.com.au/shopping">SHOP</a></li>
+      <li><a href="https://locations.tgifridays.com/">Locations</a></li>
+      <li><a href="/tgif-member-offers">Dine</a></li>
+      <li><a href="/tgif-featured-charity">Featured Causes</a></li>
+       <li><a href="/new-redeem-chadstone">Redeem</a></li>
+      <li><a href="/rewards-shop.html">Shopping Mall</a></li>
+      <?php
+      if  ($isLoggedIn){
+  echo '<li><a href="/customer/account/">My Account</a></li><li><a href="/customer/account/logout/">Log Out</a></li>';
+}else{
+   echo '<li><a href="/customer/account/login/">Sign-In/Register</a></li>';
+}
+?>
+     
+    </ul>
+    <div class="cs-chkout">
+      <a href="https://www.tgifridays.com/checkout">
+        <img src="https://www.tgifridays.com/_ui/responsive/theme-fridays/images/ShoppingBag.png" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="mnavtoggle" class="cs-sidenav">
+  <div class="cs-sidenav-top">
+    <div class="cs-sidenav-ltop">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="font-size:45px; line-height:normal; font-weight:normal;">&times;</a>
+    </div>
+    <div class="cs-sidenav-rtop">
+      <a href="/customer/account/login/" style="text-decoration:underline;"><i class="fa fa-user" aria-hidden="true"></i></a>
+    </div>
+  </div>
+  <div class="cs-mobloc">
+    <a href="https://www.chadstone.com.au/shopping/plan-my-journey"><i class="fa fa-map-marker" aria-hidden="true"></i></a>
+  </div>
+  <ul class="cs-tnav">
+    <li><a href="/tgif-howworks">How it works</a></li>
+    <li><a href="https://www.tgifridays.com/menu">Our menu</a></li>
+    <li><a href="https://locations.tgifridays.com/">Locations</a></li>
+    <li><a href="/tgif-member-offers">Member Offers</a></li>
+    <li><a href="/tgif-featured-charity">Featured Causes</a></li>
+    <li><a href="/rewards-shop.html">Shopping Mall</a></li>
+    <li><a href="/customer/account/login/">Register</a></li>
+  </ul>
+  <div class="cs-slidesoc">
+    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+    <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+  </div>
+</div>
+
+
+
+<?php } elseif($host == 'theglen.points4purpose.com.au') {?>
+
+
+<style>
+      
+@font-face {
+  font-family: Primary;
+  font-weight: normal;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3bf7f1daaf/gotham-medium.woff') format('woff'), url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3b8b26bc49/gotham-medium.ttf') format('truetype'), url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/0cc84848b0/gotham-medium.eot?#iefix') format('embedded-opentype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 100;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/a78707b395/gotham-light.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 100;
+  font-style: italic;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/3da8560271/gotham-lightitalic-1.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 700;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/955ab6775f/gotham-bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: Primary;
+  font-weight: 700;
+  font-style: italic;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/786e65e409/gotham-bolditalic.ttf') format('truetype');
+}
+      
+@font-face {
+  font-family: Secondary;
+  font-weight: normal;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/bd210f543f/helvetica-neue-md.ttf') format('truetype');
+}
+@font-face {
+  font-family: Secondary;
+  font-weight: 100;
+  font-style: normal;
+  src: url('https://s3.amazonaws.com/a.storyblok.com/f/62672/x/65dc6addf4/helvetica-neue-ultlt.ttf') format('truetype');
+}
+    </style>
+
+
+<style type="text/css">
+.cms-theglen-home-page .page-main{
+  max-width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.cms-theglen-home-page .page-main .inner-content h3{
+  text-align:center;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 1.875rem;
+  margin-bottom: 30px;
+}
+.cms-theglen-home-page .page-main .inner-content p{
+  text-align:center;
+  padding:0 15px;
+  font-size: 16PX;
+    font-weight: 100;
+    margin-bottom: 0.5rem;
+}
+.cms-theglen-home-page .mgz-element-slider .slide-heading .slide-text {
+    color: #fff!important;
+    }
+
+.nav.items ul > li:last-child, .nav.items ul > li:nth-last-child(2){
+  display: none!importand;
+}
+
+ul.nav li:last-child {
+  background-color: red!important;
+  display: none!important;
+}
+
+
+  /* JOJ custom style */
+  .nav-sections{display: none;}
+
+  .cs-nav{background-color:#fff; margin-bottom: 25px;}
+  .cs-acc{background-color:#C8102E; color: #e9e9e9; text-align: center; font-size: 15px; font-family: 'news-gothic-std', 'helvetica-neue', arial, sans-serif; padding: 8px;}
+  .cs-acc a{color: #e9e9e9;text-decoration: none;}
+  .cs-acc a:hover{color:#FFFFFF;}
+  .cs-logo{margin-right: 0; margin-left: 0; position: relative; padding: 20px 0;}
+  .cs-logo a{color:#b0aeae; font-size: 12px; font-weight: 600; text-decoration: underline; font-family: sans-serif;}
+  .cs-logo a:hover{text-decoration: none;}
+  .cs-logo-left{position: absolute; top: 0; left: 0; padding: 20px; margin-top: 2px}
+  .cs-logo-mid{text-align: center; width: 100%;}
+  .cs-logo-mid img{max-width: 150px;}
+  .cs-logo-right{position: absolute; top: 0; right: 0; padding: 20px; margin-top: 2px;}
+  .cs-mnav{position: relative;}
+  .cs-mnav ul{margin: 0; padding: 0; list-style: none; text-align: center;}
+  .cs-mnav li{display: inline-block; padding: 0px 20px 14px 20px; margin-bottom: 0;}
+  .cs-mnav li a{color:#111; font-family: 'Primary'; text-transform: uppercase; line-height: 18px; font-size: 12px; font-weight: 400;}
+  .cs-chkout{position: absolute; top: -15px; right: 25px;}
+  .cs-chkout a img{height: 40px;}
+
+  .cs-sidenav{  height: 100%; width: 0; position: fixed; z-index: 999; top: 0; left: 0; background-color: #000000; overflow-x: hidden; transition: 0.5s;}
+  .cs-tnav{margin: 0; padding: 0 0 0 20px; list-style: none;}
+  .cs-tnav li{width: 100%;}
+  .cs-tnav li a{color:#e9e9e9; font-family: 'TradeGothicLTCondEighteen'; text-transform: uppercase; line-height: 18px; font-size: 18px; letter-spacing: 1px; font-weight: bold;}
+  .cs-sidenav-top{position: relative; padding: 30px 25px;}
+  .cs-sidenav-top a{color: #e9e9e9; font-size: 12px; font-weight: bold;}
+  .cs-sidenav-top a:hover{text-decoration: none;}
+  .cs-sidenav-ltop{position: absolute; top: 5px; left: 15px;}
+  .cs-sidenav-rtop{position: absolute; top: 20px; right: 15px;}
+  .cs-mobloc{background-color: #333333; padding: 20px; margin-bottom: 25px;}
+  .cs-mobloc a{text-decoration: underline; color: #e9e9e9; font-size: 15px; font-family: 'TradeGothicLTCondEighteen';}
+  .cs-slidesoc{text-align: center; margin-top: 75px;}
+  .cs-slidesoc a{color: #e9e9e9; font-size: 28px; margin-left: 10px; margin-right: 10px;}
+
+  @media (max-width:1024px){
+    .cs-fyf{display: none;}
+    .cs-logo-right{display: none;}
+    .cs-mnav ul{display: none;}
+    .cs-chkout{top:-75px;}
+    .cs-navtoggle{background:none; border: none; margin-top: 5px;}
+    .cs-navtoggle:hover, .cs-navtoggle:focus{background: none; border: none;}
+    .cs-navtoggle span {background: #e9e9e9; height: 3px; width: 24px; display: block; margin-bottom: 5px;}
+  }
+
+  @media (min-width:1025px){
+    .cs-sidenav{display: none;}
+    .cs-navtoggle{display: none;}
+  }
+</style>
+
+<script>
+function openNav() {
+  document.getElementById("mnavtoggle").style.width = "300px";
+}
+
+function closeNav() {
+  document.getElementById("mnavtoggle").style.width = "0";
+}
+</script>
+
+<div class="cs-nav">
+
+  <div class="cs-logo">
+    
+    <div class="cs-logo-mid">
+      <a href="/"><img src="/thglane/the-glen-logo.png" /></a>
+    </div>
+    <div class="cs-logo-right">
+      <a href="/customer/account/login/"></a>
+    </div>
+  </div>
+  <div class="cs-mnav">
+    <ul>
+      <li><a href="#">How It works</a></li>
+      <li><a href="https://www.theglen.com.au/christmas">Christmas</a></li>
+      <li><a href="https://theglen.points4purpose.com.au/rewards-shop.html">Shop</a></li>
+      <li><a href="https://www.theglen.com.au/dining">Dining</a></li>
+      <li><a href="https://www.theglen.com.au/whats-on">What's On</a></li>
+      <li><a href="https://www.theglen.com.au/offers">Offers</a></li>
+      <li><a href="https://www.theglen.com.au/centre-info">Centre Info</a></li>
+      <li><a href="#">Featured Causes</a></li>
+      <?php
+      if  ($isLoggedIn){
+  echo '<li><a href="/customer/account/">My Account</a></li><li><a href="/customer/account/logout/">Log Out</a></li>';
+}else{
+   echo '<li><a href="/customer/account/login/">Sign-In/Register</a></li>';
+}
+?>
+     
+    </ul>
+    <!-- <div class="cs-chkout">
+      <a href="#">
+        <img src="https://www.tgifridays.com/_ui/responsive/theme-fridays/images/ShoppingBag.png" />
+      </a>
+    </div> -->
+  </div>
+</div>
+
+
+
+
+
+  <?php
+}else{
+
+    ?>
+
+
+
+
+<style type="text/css">
+
+.nav.items ul > li:last-child, .nav.items ul > li:nth-last-child(2){
+  display: none!importand;
+}
+
+ul.nav li:last-child {
+  background-color: red!important;
+  display: none!important;
+}
+
+
+  /* JOJ custom style */
+  .nav-sections{display: none;}
+
+  .cs-nav{background-color:#000000; margin-bottom: 25px;}
+  .cs-acc{background-color:#C8102E; color: #e9e9e9; text-align: center; font-size: 15px; font-family: 'news-gothic-std', 'helvetica-neue', arial, sans-serif; padding: 8px;}
+  .cs-acc a{color: #e9e9e9;text-decoration: none;}
+  .cs-acc a:hover{color:#FFFFFF;}
+  .cs-logo{margin-right: 0; margin-left: 0; position: relative; padding: 20px 0;}
+  .cs-logo a{color:#FFFFFF; font-size: 12px; font-weight: 600; text-decoration: underline; font-family: sans-serif;}
+  .cs-logo a:hover{text-decoration: none;}
+  .cs-logo-left{position: absolute; top: 0; left: 0; padding: 20px; margin-top: 2px}
+  .cs-logo-mid{text-align: center; width: 100%;}
+  .cs-logo-mid img{max-width: 150px;}
+  .cs-logo-right{position: absolute; top: 0; right: 0; padding: 20px; margin-top: 2px;}
+  .cs-mnav{position: relative;}
+  .cs-mnav ul{margin: 0; padding: 0; list-style: none; text-align: center;}
+  .cs-mnav li{display: inline-block; padding: 0px 20px 14px 20px; margin-bottom: 0;}
+  .cs-mnav li a{color:#e9e9e9; font-family: 'TradeGothicLTCondEighteen'; text-transform: uppercase; line-height: 18px; font-size: 18px;}
+  .cs-chkout{position: absolute; top: -15px; right: 25px;}
+  .cs-chkout a img{height: 40px;}
+
+  .cs-sidenav{  height: 100%; width: 0; position: fixed; z-index: 999; top: 0; left: 0; background-color: #000000; overflow-x: hidden; transition: 0.5s;}
+  .cs-tnav{margin: 0; padding: 0 0 0 20px; list-style: none;}
+  .cs-tnav li{width: 100%;}
+  .cs-tnav li a{color:#e9e9e9; font-family: 'TradeGothicLTCondEighteen'; text-transform: uppercase; line-height: 18px; font-size: 18px; letter-spacing: 1px; font-weight: bold;}
+  .cs-sidenav-top{position: relative; padding: 30px 25px;}
+  .cs-sidenav-top a{color: #e9e9e9; font-size: 12px; font-weight: bold;}
+  .cs-sidenav-top a:hover{text-decoration: none;}
+  .cs-sidenav-ltop{position: absolute; top: 5px; left: 15px;}
+  .cs-sidenav-rtop{position: absolute; top: 20px; right: 15px;}
+  .cs-mobloc{background-color: #333333; padding: 20px; margin-bottom: 25px;}
+  .cs-mobloc a{text-decoration: underline; color: #e9e9e9; font-size: 15px; font-family: 'TradeGothicLTCondEighteen';}
+  .cs-slidesoc{text-align: center; margin-top: 75px;}
+  .cs-slidesoc a{color: #e9e9e9; font-size: 28px; margin-left: 10px; margin-right: 10px;}
+
+  @media (max-width:1024px){
+    .cs-fyf{display: none;}
+    .cs-logo-right{display: none;}
+    .cs-mnav ul{display: none;}
+    .cs-chkout{top:-75px;}
+    .cs-navtoggle{background:none; border: none; margin-top: 5px;}
+    .cs-navtoggle:hover, .cs-navtoggle:focus{background: none; border: none;}
+    .cs-navtoggle span {background: #e9e9e9; height: 3px; width: 24px; display: block; margin-bottom: 5px;}
+  }
+
+  @media (min-width:1025px){
+    .cs-sidenav{display: none;}
+    .cs-navtoggle{display: none;}
+  }
+</style>
+
+<script>
+function openNav() {
+  document.getElementById("mnavtoggle").style.width = "300px";
+}
+
+function closeNav() {
+  document.getElementById("mnavtoggle").style.width = "0";
+}
+</script>
+
+<div class="cs-nav">
+  <div class="cs-acc">
+    <a href="#">Enable Accessibility</a>
+  </div>
+  <div class="cs-logo">
+    <div class="cs-logo-left">
+      <a href="https://www.tgifridays.com/locations" class="cs-fyf"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Plan your journey</a>
+      <button type="button" class="navbar-toggle cs-navtoggle" id="slide-nav" onclick="openNav()">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="cs-logo-mid">
+      <a href="/home"><img src="https://www.tgifridays.com/_ui/responsive/theme-fridays/images/Fridays_logo.png" /></a>
+    </div>
+    <div class="cs-logo-right">
+      <a href="/customer/account/login/"></a>
+    </div>
+  </div>
+  <div class="cs-mnav">
+    <ul>
+      <li><a href="/tgif-howworks">How it works</a></li>
+      <li><a href="https://www.tgifridays.com/menu">Our menu</a></li>
+      <li><a href="https://locations.tgifridays.com/">Locations</a></li>
+      <li><a href="/tgif-member-offers">Member Offers</a></li>
+      <li><a href="/tgif-featured-charity">Featured Causes</a></li>
+      <li><a href="/rewards-shop.html">Shopping Mall</a></li>
+      <?php
+      if  ($isLoggedIn){
+  echo '<li><a href="/customer/account/">My Account</a></li><li><a href="/customer/account/logout/">Log Out</a></li>';
+}else{
+   echo '<li><a href="/customer/account/login/">Sign-In/Register</a></li>';
+}
+?>
+     
+    </ul>
+    <div class="cs-chkout">
+      <a href="https://www.tgifridays.com/checkout">
+        <img src="https://www.tgifridays.com/_ui/responsive/theme-fridays/images/ShoppingBag.png" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="mnavtoggle" class="cs-sidenav">
+  <div class="cs-sidenav-top">
+    <div class="cs-sidenav-ltop">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="font-size:45px; line-height:normal; font-weight:normal;">&times;</a>
+    </div>
+    <div class="cs-sidenav-rtop">
+      <a href="/customer/account/login/" style="text-decoration:underline;"><i class="fa fa-user" aria-hidden="true"></i></a>
+    </div>
+  </div>
+  <div class="cs-mobloc">
+    <a href="https://www.tgifridays.com/locations"><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;Find Your Fridays</a>
+  </div>
+  <ul class="cs-tnav">
+    <li><a href="/tgif-howworks">How it works</a></li>
+    <li><a href="https://www.tgifridays.com/menu">Our menu</a></li>
+    <li><a href="https://locations.tgifridays.com/">Locations</a></li>
+    <li><a href="/tgif-member-offers">Member Offers</a></li>
+    <li><a href="/tgif-featured-charity">Featured Causes</a></li>
+    <li><a href="/rewards-shop.html">Shopping Mall</a></li>
+    <li><a href="/customer/account/login/">Register</a></li>
+  </ul>
+  <div class="cs-slidesoc">
+    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+    <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+  </div>
+</div>
+
+<?php
+//}
+?>
+<?php /*
+	<div class="panel wrapper">
+		<div class="panel header">hey
+			<?= $block->getChildHtml('store_language') ?>
+			<?= $block->getChildHtml('top.links') ?>
+		</div>
+	</div>
+	<div class="header content">
+		<?= $block->getChildHtml('logo') ?>
+		<?= $block->getChildHtml('minicart') ?>
+		<?= $block->getChildHtml('topSearch') ?>
+	</div>
+*/
+
+}
+
+  ?>

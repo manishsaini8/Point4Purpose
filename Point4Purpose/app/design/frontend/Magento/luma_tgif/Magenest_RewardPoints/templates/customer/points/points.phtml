@@ -1,0 +1,245 @@
+<style>
+    .modal-popup.modal-slide .modal-footer{
+        border-top: 0px;
+    }
+</style>
+<?php
+/**
+ * Copyright © 2020 Magenest. All rights reserved.
+ * See COPYING.txt for license details.
+ * @category  Magenest
+ */
+/** @var  $block \Magenest\RewardPoints\Block\Customer\Points */
+$_data = $block->getTransactions();
+$_rule = $block->getRule();
+$customer = $block->getAccount();
+$_donation = $block->getDonation();
+$_pendingPoints = $block->getPendingPoints();
+
+/**
+ * @var \Magenest\RewardPoints\Helper\MembershipData $membershipHelper
+ */
+$membershipHelper = $this->helper('\Magenest\RewardPoints\Helper\MembershipData');
+$customerTier = $membershipHelper->getCustomerTier($customer->getCustomerId());
+$imageHelper = $this->helper('\Magenest\RewardPoints\Helper\ImageHelper');
+$availPoint = 0;
+?>
+<div class="reard-info">
+    <div class="reward-points-description"><?php echo $block->getDescription(); ?></div>
+    <?php
+    if (empty($block->getDescription())) {
+        echo $block->getLandingPageLink();
+    } else {
+        echo '<br>' . $block->getLandingPageLink();
+    }
+    ?>
+</div>
+
+<?php if ($_data && count($_data)): ?>
+
+    <h3><?php echo __('Points Summary') ?></h3>
+
+<?php
+
+ $availPoint = $customer->getPointsCurrent() - $_donation;
+
+ ?>
+
+    <?php if ($membershipHelper->isEnableMembership()) : ?>
+    <div class="customer-membership-info">
+        <div class="progress-bar">
+            <span class="progress" style="width: <?= $membershipHelper->getProgressPercent($customer) ?>%"></span>
+            <div class="milestone milestone--reached">
+                <div class="rank"><span><?= __('Beginner') ?></span></div>
+                <span class="rank-total">0</span>
+            </div>
+            <?php
+            foreach ($membershipHelper->getActiveTier() as $tier) {
+                ?>
+                <div class="milestone <?= $block->isReachTier($tier, $customerTier) ? 'milestone--reached' : '' ?>">
+                    <div class="rank rank-<?= $tier->getData(\Magenest\RewardPoints\Api\Data\MembershipInterface::GROUP_CODE) ?>">
+                        <span><?= $tier->getData(\Magenest\RewardPoints\Api\Data\MembershipInterface::GROUP_NAME) ?></span>
+                        <img src="<?php echo $imageHelper->getRewardPointsViewFileUrl($tier->getData(\Magenest\RewardPoints\Api\Data\MembershipInterface::TIER_LOGO)); ?>"
+                             alt="<?= $tier->getData(\Magenest\RewardPoints\Api\Data\MembershipInterface::GROUP_NAME) ?>"/>
+                    </div>
+                    <span class="rank-total"><?= $block->getShortCondition($tier) ?></span>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+
+        <div class="customer-reward-point">
+            <?php if ($customerTier->getId()): ?>
+                <p><span><?= __('Your current tier is %1', $block->escapeHtml($customerTier->getData(\Magenest\RewardPoints\Api\Data\MembershipInterface::GROUP_NAME)))?></span></p>
+            <?php else: ?>
+                <p><span><?= __('You don\'t belong to any Tier') ?></span></p>
+            <?php endif; ?>
+            <p><?= $membershipHelper->getNextTierCondition($customer->getCustomerId()) ?></p>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <div class="table-wrapper account-info" id="account-info">
+        <table id="account-info" class="data table table-collection-account">
+            <thead>
+            <tr class="headings">
+                <th class="col-points-total"><span><?php /* @escapeNotVerified */
+                        echo __('Total Points') ?></span></th>
+                <th class="col-points-current"><span><?php /* @escapeNotVerified */
+                        echo __('Available Points') ?></span></th>
+                <th class="col-points-current"><span><?php /* @escapeNotVerified */
+                        echo __('Pending Points') ?></span></th>
+                <th class="col-points-current"><span><?php /* @escapeNotVerified */
+                        echo __('Donation Points') ?></span></th>
+                <th class="col-points-lost"><span><?php /* @escapeNotVerified */
+                        echo __('Withdrawn Points') ?></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td data-th="<?php echo $block->escapeHtml(__('Total Points')) ?>" class="col-points-total">
+                    <?php echo $customer->getPointsTotal(); ?>
+                </td>
+                <td data-th="<?php echo $block->escapeHtml(__('Available Points')) ?>" class="col-points-total">
+                    <?php echo $availPoint; ?>
+                </td>
+                </td>
+                <td data-th="<?php echo $block->escapeHtml(__('Pending Points')) ?>" class="col-points-total">
+                    <?php echo  $_pendingPoints; ?>
+                </td>
+                <td data-th="<?php echo $block->escapeHtml(__('Donatio4n Points')) ?>" class="col-points-total">
+                    <?php echo  $_donation; ?>
+                </td>
+                <td data-th="<?php echo $block->escapeHtml(__('Spent Points')) ?>" class="col-points-lost">
+                    <?php echo $customer->getPointsSpent(); ?>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="primary withdraw">
+            <span class="action submit primary" id="withdraw" title="withdraw">
+                <span>Withdraw</span>
+            </span>
+    </div>
+    <h3><?php echo __('Transaction History') ?></h3>
+    <div class="table-wrapper transaction-history" id="transaction_history">
+        <table id="my-collection-products-table" class="data table table-collection-transaction">
+            <thead>
+            <tr class="headings">
+                <th class="col-id"><span><?php /* @escapeNotVerified */
+                        echo __('Id') ?></span></th>
+                <th class="col-rule-comment"><span><?php /* @escapeNotVerified */
+                        echo __('Title') ?></span></th>
+                <th class="col-change-points"><span><?php /* @escapeNotVerified */
+                        echo __('Points Change') ?></span></th>
+                <th class="col-current-points"><span><?php /* @escapeNotVerified */
+                        echo __('Points After') ?></span></th>
+                <th class="col-insertion-date"><span><?php /* @escapeNotVerified */
+                        echo __('Updated at') ?></span></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($_data as $data) : ?>
+                <tr>
+                    <td data-th="<?php echo $block->escapeHtml(__('Id')) ?>" class="col-id">
+                        <?php echo $data->getId(); ?>
+                    </td>
+                   <!-- <td data-th="<?php /*echo $block->escapeHtml(__('Event')) */?>" class="col-rule-id">
+                        <?php /*if ($data->getRuleId() == 0)
+                            echo 'Redeem points';
+                        elseif ($data->getRuleId() == -1)
+                            echo 'Points from P4P';
+                        elseif ($data->getRuleId() == -2)
+                            echo 'Referral code points';
+                        elseif ($data->getRuleId() == -3)
+                            echo 'Points Expired';
+                        elseif ($data->getRuleId() == -4)
+                            echo __("Deduct received points");
+                        elseif ($data->getRuleId() == -5)
+                            echo __("Return applied points");
+                        else echo $_rule->load($data->getRuleId())->getTitle();
+                        */?>
+                    </td>-->
+                    <td data-th="<?php echo $block->escapeHtml(__('From')) ?>" class="col-rule-id">
+                        <?php echo $data->getComment() ?>
+                    </td>
+                    <td align="center" data-th="<?php echo $block->escapeHtml(__('Points Change')) ?>"
+                        class="col-change-points">
+                        <?php if (($pointsChange = $data->getPointsChange()) > 0)
+                            if($data->getProductId() == 3){
+                                  echo '<span style="color:black">-' . $pointsChange . '</span>';
+                            }else {
+                                echo '<span style="color:black">+' . $pointsChange . '</span>';
+                            }
+                        else echo '<span style="color:black">' . $pointsChange . '</span>'; ?>
+                    </td>
+                    <td align="center" data-th="<?php echo $block->escapeHtml(__('Points After')) ?>"
+                        class="col-current-points">
+                        <?php echo $data->getPointsAfter(); ?>
+                    </td>
+                    <td data-th="<?php echo $block->escapeHtml(__('Updated at')) ?>" class="col-insertion-date">
+                        <?php echo date('Y-m-d', strtotime($data->getInsertionDate())) ?>
+                    </td>
+
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php if ($block->getPagerHtml()): ?>
+            <div
+                class="order-products-toolbar toolbar bottom custom-pager"><?php echo $block->getPagerHtml(); ?></div>
+            <style>
+                .order-products-toolbar .limiter {
+                    float: right;
+                }
+            </style>
+        <?php endif ?>
+    </div>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */
+            echo __('You have no Reward Points.'); ?></span></div>
+<?php endif ?>
+<div id="popup-modal" style="display:none;">
+    <p class="pp"> Insufficient Funds!</p>
+   <br/>
+    <p class="pp">Your 'Available Points' must reach 3000 to be able to withdraw.
+    </p>
+</div>
+<script>
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false
+            };
+
+            var popup = modal(options, $('#popup-modal'));
+            $("#withdraw").on('click',function(){
+                var wamount = '<?php echo $availPoint;?>'
+                if(wamount >= 3000){
+                    window.location.href = window.location.origin +"/withdraw";
+                }else{
+                    $("#popup-modal").modal("openModal");
+                }
+            });
+
+        }
+    );
+</script>
+
+
+
+
+    

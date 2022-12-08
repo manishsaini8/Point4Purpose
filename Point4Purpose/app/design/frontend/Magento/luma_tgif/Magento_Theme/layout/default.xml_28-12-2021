@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+	<head>
+		<css src="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" src_type="url"/>
+  </head>
+	
+	<body>
+		<referenceContainer name="header.panel.wrapper" remove="true"/>
+		<referenceContainer name="header-wrapper" remove="true"/>
+		<referenceContainer name="header.container">
+			<block class="Magento\Framework\View\Element\Template" name="header.main.tgif" template="Magento_Theme::header.phtml">
+				<block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="Magento_Store::switch/languages.phtml">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Magento\Store\ViewModel\SwitcherUrlProvider</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Theme\Block\Html\Header\Logo" name="logo"/>
+                <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_Search::form.mini.phtml">
+	                <arguments>
+	                    <argument name="configProvider" xsi:type="object">Magento\Search\ViewModel\ConfigProvider</argument>
+	                </arguments>
+	            </block>
+	            <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="Magento_Checkout::cart/minicart.phtml">
+	                <arguments>
+	                    <argument name="jsLayout" xsi:type="array">
+	                        <item name="types" xsi:type="array"/>
+	                        <item name="components" xsi:type="array">
+	                            <item name="minicart_content" xsi:type="array">
+	                                <item name="component" xsi:type="string">Magento_Checkout/js/view/minicart</item>
+	                                <item name="config" xsi:type="array">
+	                                    <item name="template" xsi:type="string">Magento_Checkout/minicart/content</item>
+	                                </item>
+	                                <item name="children" xsi:type="array">
+	                                    <item name="subtotal.container" xsi:type="array">
+	                                        <item name="component" xsi:type="string">uiComponent</item>
+	                                        <item name="config" xsi:type="array">
+	                                            <item name="displayArea" xsi:type="string">subtotalContainer</item>
+	                                        </item>
+	                                        <item name="children" xsi:type="array">
+	                                            <item name="subtotal" xsi:type="array">
+	                                                <item name="component" xsi:type="string">uiComponent</item>
+	                                                <item name="config" xsi:type="array">
+	                                                    <item name="template" xsi:type="string">Magento_Checkout/minicart/subtotal</item>
+	                                                </item>
+	                                            </item>
+	                                        </item>
+	                                    </item>
+	                                    <item name="extra_info" xsi:type="array">
+	                                        <item name="component" xsi:type="string">uiComponent</item>
+	                                        <item name="config" xsi:type="array">
+	                                            <item name="displayArea" xsi:type="string">extraInfo</item>
+	                                        </item>
+	                                    </item>
+	                                    <item name="promotion" xsi:type="array">
+	                                        <item name="component" xsi:type="string">uiComponent</item>
+	                                        <item name="config" xsi:type="array">
+	                                            <item name="displayArea" xsi:type="string">promotion</item>
+	                                        </item>
+	                                    </item>
+	                                </item>
+	                            </item>
+	                        </item>
+	                    </argument>
+	                </arguments>
+	                <container name="minicart.addons" label="Mini-cart promotion block"/>
+	            </block>
+			</block>
+		</referenceContainer>
+		<move element="top.links" destination="header.main.tgif"/>
+	</body>
+</page>
