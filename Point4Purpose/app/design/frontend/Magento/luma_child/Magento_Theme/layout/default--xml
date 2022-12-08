@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+	<head>
+        <css src="css/custom.css" />
+		<css src="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" src_type="url"/>
+
+        <script src="https://www.google.com/recaptcha/api.js" src_type="url" />
+  </head>
+	<body>
+		
+
+        <referenceContainer name="header-wrapper">
+            <block class="Magento\Cms\Block\Block" name="maintaince_mode">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">maintaince_mode</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+		<referenceBlock name="logo"> 
+             <arguments> 
+                 <argument name="logo_width" xsi:type="number">194</argument> 
+             </arguments> 
+         </referenceBlock> 
+		<referenceContainer name="header.panel.wrapper" remove="true"/>
+		<move element="catalog.topnav" destination="header-wrapper" after="logo"/>
+		<move element="top.links" destination="header.main.tgif"/>
+		<referenceBlock name="minicart" remove="true"/>
+		<referenceBlock name="top.search" remove="true"/>
+
+		 <referenceContainer name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+                <arguments>
+                    <argument name="group_name" xsi:type="string">navigation-sections</argument>
+                    <argument name="group_css" xsi:type="string">nav-sections</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                	 <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="Magento_Theme::html/topmenu.phtml" ttl="3600" before="-"/>
+                                       
+				   <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.mbtopnav" template="Magento_Theme::html/mbtopmenu.phtml" ttl="3600" before="-"/>
+                </block>
+            </block>
+            <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div" htmlClass="top-container"/>
+            <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        </referenceContainer>
+        <referenceContainer name="footer-container">
+            <block class="Magento\Theme\Block\Html\Footer" name="footer" template="footer.phtml" cacheable="false"/>
+		</referenceContainer>
+        <move element="copyright" destination="before.body.end"/>
+	</body>
+</page>

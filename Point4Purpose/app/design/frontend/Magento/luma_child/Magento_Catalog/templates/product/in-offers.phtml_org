@@ -1,0 +1,87 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+$oi = $this->getRequest()->getParam('id');
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+$strUrl = 'https://api.pokitpal.com/v1/InstoreOffers/'.$oi;
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $strUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+));
+
+$rsInlineOffer = curl_exec($curl);
+$rsInlineOffer = json_decode($rsInlineOffer, true);
+?>
+
+<h2><?= $rsInlineOffer['offerTitle']?></h2>
+
+<div class="logo">
+    <img src="<?= $rsInlineOffer['logoUrl']?>"/>
+</div>
+<div class="banner">
+    <img src="<?= $rsInlineOffer['coverShotUrl']?>"/>
+</div>
+
+<div class="adv_name">
+    <label class="lb"><?= __('Offer :')?></label>
+    <?= $rsInlineOffer['advertiserName']?>
+</div>
+
+<div class="categoryName">
+    <label class="lb"><?= __('Category :')?></label>
+    <?= $rsInlineOffer['categoryName']?>
+</div>
+
+<div class="description">
+    <label class="lb"><?= __('Description :')?></label>
+    <?= $rsInlineOffer['description']?>
+</div>
+
+<div class="howItWorks">
+    <label class="lb"><?= __('How work :')?></label>
+    <?= $rsInlineOffer['howItWorks']?>
+</div>
+
+<div class="terms">
+    <label class="lb"><?= __('Terms :')?></label>
+    <?= $rsInlineOffer['terms']?>
+</div>
+
+<?php if($rsInlineOffer["locations"]){ ?>
+<div class="mapadd">
+    <div id="googleMap" style="width:25%;height:250px;"></div>
+
+    <script>
+        function myMap() {
+
+            var mapProp= {
+                center:new google.maps.LatLng('<?= $rsInlineOffer["locations"][0]["latitude"] ?>','<?= $rsInlineOffer["locations"][0]["longitude"] ?>'),
+                zoom:17,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+
+            };
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng('<?= $rsInlineOffer["locations"][0]["latitude"] ?>','<?= $rsInlineOffer["locations"][0]["longitude"] ?>'),
+            });
+
+            var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTCVb3lNWvuRY6cSKK66ftXq-vOy9VG1Q&callback=myMap"></script>
+<!--    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBTCVb3lNWvuRY6cSKK66ftXq-vOy9VG1Q&callback=myMap" id="googleMapsApiScript" async=""></script>-->
+</div>
+<?php } ?>

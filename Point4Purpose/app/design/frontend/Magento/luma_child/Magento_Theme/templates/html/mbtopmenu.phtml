@@ -1,0 +1,221 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Top menu for store
+ * About us
+Shop
+Redeem voucher
+Sign in
+Register
+
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php
+
+$x =  explode('/',$this->getUrl('///', ['_current' => true, '_use_rewrite' => true]));
+$routeName = $this->getRequest()->getRouteName();
+$controllerName = $this->getRequest()->getControllerName();
+?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+
+
+$catId = 644;  //Parent Category ID
+$subCategory = $objectManager->create('Magento\Catalog\Model\Category')->load($catId);
+$subCats = $subCategory->getChildrenCategories()->addAttributeToSort('name','ASC');
+
+
+$catIdnew = 682;  //Parent Category ID
+$subCategorynew = $objectManager->create('Magento\Catalog\Model\Category')->load($catIdnew);
+$subCatsnew = $subCategorynew->getChildrenCategories()->addAttributeToSort('name','ASC');
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+ 
+$baseurl = $storeManager->getStore()->getBaseUrl();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+  $token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+$offercategory='';
+if($customerSession->isLoggedIn()) {
+ $thecustID = $customerSession->getCustomer()->getId(); 
+	
+	//echo "</pre>";
+ $cToken = $customerSession->getCustomer()->getCardToken();
+$token = $cToken;
+				//echo "<pre>";
+				//	print_r($offercategory['categories']);
+				//	echo "</pre>";
+}
+   $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.pokitpal.com/v1/Offers/GetAllCategories",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 30,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json",
+            "Authorization: Bearer $token"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+	
+$offercategory = json_decode($response, true);
+$offercategories = $offercategory['categories'];
+?>
+<style type="text/css">
+  li.ui-menu-item.all-category {
+    display: none;
+}
+</style>
+<nav class="navigation-mb" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+    	    <li class="level0 nav-7 category-item last level-top ui-menu-item  <?php if($x[3] == 'about'){echo 'active';}else{echo '';} ?>" role="presentation">
+            <a href="/about" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>About Us</span>
+            </a>
+        </li>
+        <li class="level0 nav-1 category-item first last level-top parent ui-menu-item <?php if($x[3] == 'rewards-shop.html?cat=667'){echo 'active';}else{echo '';} ?>" role="presentation">
+            <a href="<?=$block->getBaseUrl()?>rewards-shop.html" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-2" tabindex="-1" ><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span><span class="shp">Shop</span></a>
+
+           <?php if(!empty($offercategory)){ ?>
+          <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 48px; left: -0.390625px;" aria-hidden="true">
+            <?php
+				
+					
+			foreach ($offercategories as $offers) { ?>
+             <?php
+               if($offers['name']){
+                ?> 
+            <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation"><a href="<?php echo $baseurl."rewards-shop.html?pcat=".$offers['id'] ?>&cat=642" id="ui-id-3" class="ui-corner-all" tabindex="-1" role="menuitem"><span><?php echo $offers['name'];?></span></a>
+            </li>
+            <?php }else{
+
+               }
+            } ?>
+			</ul>
+			<?php } ?>
+
+        </li>
+
+
+        <li class="level0 nav-1 category-item first last level-top parent ui-menu-item <?php if($x[3] == 'cause.html'){echo 'active';}else{echo '';} ?>" role="presentation">
+            <a href="<?=$block->getBaseUrl()?>cause.html" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-2" tabindex="-1" role="menuitem"><!--span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span--><span class="cause">Your Cause</span></a>
+
+            <!--ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 48px; left: -0.390625px;" aria-hidden="true">
+                <?php foreach ($subCatsnew as $subcatnew) { ?>
+                    <?php
+                    if($subcatnew->getProductCollection()->count() > 0 ){
+                        $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcatnew->getId());
+                        ?>
+                        <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation"><a href="<?php echo $subCategorynew->getUrl()."?cat=".$subcatnew->getId();?>" id="ui-id-3" class="ui-corner-all" tabindex="-1" role="menuitem"><span><?php echo $subcatnew->getName();?></span></a>
+                        </li>
+                    <?php }} ?>
+            </ul-->
+        </li>
+
+
+        <li class="level0 nav-7 category-item last level-top ui-menu-item  <?php if($routeName == 'rewardpointscoupon'){echo 'active';}else{echo '';} ?>" role="presentation">
+            <a href="/rewardpointscoupon/check" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Redeem Voucher</span>
+            </a>
+        </li>
+       
+              <?php
+
+              if ($routeName == 'customer') {
+                  $cls = 'active';
+              } else {
+                  $cls = 'active';
+              }
+
+              if ($controllerName == 'account') {
+                  $cls = 'active';
+              } else {
+                  $cls = '';
+              }
+      if  ($isLoggedIn){
+  echo '
+  <li class="level0 nav-7 category-item last level-top ui-menu-item '.$cls.'" role="presentation">
+            <a href="/customer/account" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>My Account</span>
+            </a>
+        </li>
+ <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/logout/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Log Out</span>
+            </a>
+        </li>';
+}else{
+   echo '<li class="level0 nav-7 category-item last level-top ui-menu-item parent ' .$cls.'" role="presentation">
+            <a href="/customer/account/login/" class="level-top ui-corner-all mbtg" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span class="sign-in">Sign-In/Register</span>
+            </a>
+
+             
+       	 </li>';
+}
+?>
+    </ul>
+</nav>
+
+<script>
+require(['jquery'],function($){  
+
+  jQuery(document).ready(function(){
+	if($( window ).width() < 767)
+	 {
+		jQuery("#ui-id-2.ui-corner-all").click(function(e){	
+			e.preventDefault();
+		});
+	 }
+	  
+   jQuery(".level-top a.ui-corner-all span.ui-icon-carat-1-e").click(function(){
+	  // alert('ffff');
+    jQuery(".dropdown-menu").toggle();
+  });
+
+      jQuery(".level-top #ui-id-2 span.shp").click(function(){
+          //jQuery(this).parent().next().hide();
+          var custom_link = jQuery(this).parent().attr("href");
+
+          /*if (jQuery('ul.submenu-1').css("display") != "none"){*/
+              //alert(custom_link);
+          jQuery(".navigation-mb").css("display", "none");
+
+              window.location.href= custom_link;
+          /*}*/
+
+        //  window.location.href= jQuery(this).parent('a').attr('href');
+
+      });
+
+      jQuery(".level-top #ui-id-2 span.cause").click(function(){
+          var custom_link = jQuery(this).parent().attr("href");
+          jQuery(".navigation-mb").css("display", "none");
+          window.location.href= custom_link;
+      });
+
+      jQuery(".level-top #ui-id-8 span.sign-in").click(function(){
+          var custom_link = jQuery(this).parent().attr("href");
+          jQuery(".navigation-mb").css("display", "none");
+          window.location.href= custom_link;
+      });
+  });
+
+});
+</script>

@@ -1,0 +1,979 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<link rel="stylesheet" type="text/css" href="/assets/catpages.css?gfdgfdg"></link>
+<style type="text/css">
+  @media (max-width: 500px)
+  {
+    /* .action.primary, .action-primary, .amshopby-button, .am-filter-go {
+
+    font-size: 8px!important;
+} */
+  }
+
+  /* JOJ */
+
+  .page-header, .item.product.product-item{box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); !important; border-radius: 5px; margin-bottom: 10px!important;}
+  .products-grid .product-item-info{transition:all 0.5s ease;}
+  .products-grid .product-item-info:hover, .products-grid .product-item-info.active{
+    border:none !important; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); border-radius: 5px;
+  }
+  .earning-product-list {
+    font-size: 0.9em;
+    clear: both;
+    margin-bottom: 0.9em;
+}
+.framelogin,.framelogin a, .framelogin span{    color: red!important;
+
+    
+    width: 100%;
+}
+.breadcrumbs .pages{
+  float: right;
+      font-size: 10px!important;
+}
+.breadcrumbs .pages .items .item:after{
+  content: unset!important;
+  font-family: unset!important;
+}
+
+.breadcrumbs .pages .action.next:before,.breadcrumbs .pages .action .next, .breadcrumbs .pages .items .item {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 10px;
+    line-height: 12px!important;
+  }
+
+.breadcrumbs .page{
+  line-height: 18px!important;
+}
+.breadcrumbs .items{
+  max-width: 400px;
+    display: inline-block;
+}
+.breadcrumbs .item:not(:last-child):after {
+    
+    line-height: unset!important;
+    
+}
+.breadcrumbs .items .item:after{
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 10px;
+    line-height: 18px;
+   # content: unset!important;
+  #  font-family: unset!important;
+    margin: unset!important;
+    vertical-align: unset!important;
+    display: unset!important;
+    font-weight: unset!important;
+    overflow: unset!important;
+    speak:unset!important;
+    text-align: center;
+}
+
+  .products-grid .product-image-container{
+      padding-top: 10px;
+  }
+.product-image-photo {
+  
+    margin: unset!important;
+
+}
+.product-image-container img {
+    max-width: 100%!important;
+
+}
+.item.product.product-item {
+    padding: unset!important;
+}
+.cant-find{
+  text-align:center!important;
+
+    padding-top: 8px;
+}
+</style>
+
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$count_productCollection = $block->getLoadedProductCollection()->count();
+//$productCount = $collection->count();
+/** @var \Magento\Catalog\Helper\Output $_helper */
+//print_r($block->getLoadedProductCollection());
+$_helper = $block->getData('outputHelper');
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+//$whereweare = $block->getRequest()->getParam('id');
+$whereweare = $block->getUrl();
+ //$query = ['str1' => 'value1', 'str2' => 'value2',];
+    $whereweare = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+
+
+    if (strpos($whereweare, "select-charity") || strpos($whereweare, "682") || strpos($whereweare, "cause") || strpos($whereweare, "cause2")){
+        $whereweare = 'yes';
+         $selcharpage = 1;
+         $csLabel = "Sign in to Support";
+         //<style>dli.[data-label]:first-of-type {display:none;} <style>
+       /*  echo '<h2 class="title-page ">Select the cause of your choice</h2>
+         <div class="container searchbit"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="/catalogsearch/result/" method="get" _lpchecked="1"><div class="outerinput">
+<input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for causes" maxlength="128"></div>
+<input type="hidden" name=cat value=682><button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>
+<div class="cant-find"><p>Can\'t find you Charity? <a id="categorySearchBtn" href="/charitysuggestion">Click here</a></p></div>
+<style>.title-page{  text-align: center;
+    color: #0096a5!important;}.page-title-wrapper{display:none;}.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}.searchbit{text-align: center;}.outerinput{max-width: 400px;
+    display: inline-block;}.sbut{height: 30px!important;
+    margin-bottom: 4px!important;}</style>';*/
+    }else{
+         $whereweare = 'no';
+         $selcharpage = 0;
+
+
+////////////////////////////////////////
+//// COUNt IT USING JS on Frontend ////
+//////////////////////////////////////
+
+        // echo 'noncharstuff';
+         //echo $count_productCollection.'Items';
+        /* echo '<div class="container searchbit"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="/catalogsearch/result/" method="get" _lpchecked="1">
+<div class="outerinput"><input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for a store" maxlength="128"></div>
+<input type="hidden" name=cat value=644><button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>
+
+<style>.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}.searchbit{text-align: center;}.outerinput{max-width: 400px;
+    display: inline-block;}.sbut{height: 30px!important;
+    margin-bottom: 4px!important;}</style>';*/
+    }
+
+
+
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $om->get('Magento\Customer\Model\Session');
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+
+$chUrl = '';
+if($customerSession->isLoggedIn()) {
+ $thecustID = $customerSession->getCustomer()->getId();
+    $customerSession->getCustomer()->getName(); 
+    $customerSession->getCustomer()->getEmail();
+    $cToken = $customerSession->getCustomer()->getCardToken();
+   // $cToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSIsIlNlc3Npb25LZXkiOiI0YWIzNjM2Ni0wODYwLTRkMmUtOTI5Yy05OTgzNjRmMDE2NjYiLCJVc2VySWQiOiIxNTUwMDEwIiwiTmV0d29ya0lkIjoiYTllMDFhODEtYTI3My00ZTc1LTg1ODMtZWRmNjVhYjY3NWY4IiwiUG9raXRQYWwuQWNjZXNzVHlwZXMiOiJQb2tpdFBhbC5BcGkiLCJQb2tpdFBhbC5BY2Nlc3NSb2xlIjoiVXNlciIsImV4cCI6MTY2MTA4MTY1NSwiaXNzIjoiUG9raXRQYWwiLCJhdWQiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSJ9.GOa2CXv7fHQ0qNboGWYZtgyQ2-hBZ5S18JvDZDAfR1M';
+    $customerSession->getCustomer()->getGroupId(); // get Customer Group Id
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.pokitpal.com/v1/DebitCards",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json",
+            "Authorization: Bearer $cToken"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+//print_r($response);
+$cardslist = json_decode($response);
+
+
+if(!isset($_REQUEST['query'])) {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.pokitpal.com/v1/OfferGroup',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Authorization: Bearer $cToken"
+            ),
+        ));
+
+        $resOffers = curl_exec($curl);
+        $resOffers = json_decode($resOffers, true);
+
+        $rsInStoreOffer = $resOffers['instore'];
+        $rsOnline = $resOffers['online'];
+    }
+
+
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.pokitpal.com/v1/Association',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            "Content-Type: application/json",
+            "Authorization: Bearer $cToken"
+        ),
+    ));
+
+    $resAssoc = curl_exec($curl);
+    $resAssoc = json_decode($resAssoc, true);
+    $getAssoc = $resAssoc['associations'];
+}
+
+$url = 'https://api.pokitpal.com/v1/OnlineOffers';
+if(isset($_REQUEST['query'])){
+    $d = explode(" ",$_REQUEST['query']);
+    if(count($d) > 1){
+        $qparam = end($d);
+        $fg = '';
+    }else{
+        $qparam = $d[0];
+    }
+    $url = $url."?query=".$qparam;
+}
+if(isset($_REQUEST['categoryId'])){
+    if(isset($_REQUEST['query'])) {
+        $url = $url . "&categoryId=" . $_REQUEST['categoryId'];
+    }else{
+        $url = $url . "?categoryId=" . $_REQUEST['categoryId'];
+    }
+}
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+));
+
+
+$responseOffersOnline = curl_exec($curl);
+$rsOffersOnline = json_decode($responseOffersOnline, true);
+
+$rsOffersOnline = $rsOffersOnline['records'];
+
+
+$strUrl = 'https://api.pokitpal.com/v1/InstoreOffers/?latitude=-33.872761&longitude=151.205338&distance=200';
+if(isset($_REQUEST['query'])){
+    $d = explode(" ",$_REQUEST['query']);
+    if(count($d) > 1){
+        $qparam = end($d);
+
+    }else{
+        $qparam = $d[0];
+    }
+    $strUrl = $strUrl.'&query='.$qparam;
+}
+
+if(isset($_REQUEST['categoryId'])){
+    $strUrl = $strUrl . "&categoryId=" . $_REQUEST['categoryId'];
+}
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $strUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+));
+
+$rsInlineOffer = curl_exec($curl);
+$rsInlineOffer = json_decode($rsInlineOffer, true);
+
+$rsInlineOffer = $rsInlineOffer['records'];
+
+/*echo "<pre>";
+print_r($rsOffersOnline['records']);
+die;*/
+//$whereweare = "";
+if($isLoggedIn) {
+    $btnTitle = 'Shop Now';
+}
+ else {
+    $btnTitle = 'Sign in to Shop';
+}
+?>
+
+<?php 
+$pagename =  $this->getRequest()->getFullActionName(); 
+if($pagename != 'catalogsearch_result_index'){
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');//get current category
+    $cateid = $category->getId();
+}
+else
+{
+	 $urldata =	$this->getRequest()->getParam('cat');
+	$cateid = $urldata;
+}
+
+$ct = $this->getRequest()->getParam('cat');
+
+//$cateid = $urldata;
+
+//echo $_productCollection->count();die;	
+
+?>
+
+<?php
+$flag = 0;
+if($cateid == '712'){
+    $ct = '710';
+    $flag = 1;
+}
+?>
+<?php if (!$_productCollection->count()): ?>
+<?php if($ct !== '710') : ?>
+    <div class="message info empty">
+        <div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div>
+    </div>
+<?php endif; ?>
+    <?php if($ct == '710') : ?>
+<div class="products wrapper grid products-grid">
+
+    <?php if(!empty($rsOffersOnline)):?>
+        <h2 class="md-title" style="display:<?php echo  $flag == 1 ? 'none':'block';?>"><?= __('Online Offers')?></h2>
+    <ol class="products list items product-items " style="display:<?php echo  $flag == 1 ? 'none':'block';?>">
+        <?php foreach ($rsOffersOnline as $onlineOffr):?>
+            <li class="item product product-item">
+                <div class="product-item-info" id="product-item-info_9309" data-container="product-grid">
+                                                            <span class="product-image-container product-image-container-9309" style="width: 240px;">
+    <span class="product-image-wrapper" style="padding-bottom: 125%;">
+        <img class="product-image-photo-o" src="<?= $onlineOffr['logo']?>" loading="lazy" width="240" height="300" alt="Crowne Plaza Queenstown"></span>
+</span>                    <div class="product details product-item-details">
+                        <strong class="product name product-item-name">
+                            <?= $onlineOffr['advertiser'];?>                        </strong><p class="text-center">   <?= $onlineOffr['title'];?>    </p>
+
+                        <div class="product-item-name">
+                            <div class="price-box price-final_price" data-role="priceBox" data-product-id="9309" data-price-box="product-id-9309">
+    <span class="special-price">
+
+
+<span class="price-container price-final_price tax weee">
+            <span class="price-label">  <?= $onlineOffr['advertiser'];?> </span>
+        <span id="product-price-9309" data-price-amount="109" data-price-type="finalPrice" class="price-wrapper "><span class="price"><?= __('Online')?></span></span>
+        </span>
+    </span>
+
+                            </div>                        </div>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+
+
+                                    <div class="earning-product-list">Shop, Save, Earn <br>&amp; Support a Cause</div>
+                                    <div class="framelogin" style="color: red;float: left;width:100%;">
+                                        <?php if($isLoggedIn){ ?>
+                                        <a href="<?= $onlineOffr['trackingUrl']?>" target="_blank" class="btn btn--wd">
+
+                                            <?= $btnTitle; ?></a>
+                                            <?php }else{ ?>
+                                            <a href="<?= $block->escapeUrl($block->getUrl('customer/account/login', ['referer' => base64_encode($this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]))])); ?>" class="btn btn--wd"> <?= $btnTitle; ?></a>
+
+                                        <?php } ?>
+                                            </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        <?php endforeach; ?>
+    </ol>
+
+    <?php
+    else:
+        echo 'No Online Offer found';
+    endif; ?>
+        <?php if(!empty($rsInlineOffer)):?>
+            <h2 class="md-title" style="display:<?php echo  $flag == 1 ? 'none':'block';?>"><?= __('In Store Offers')?></h2>
+            <ol class="products list items product-items"  style="display:<?php echo  $flag == 1 ? 'none':'block';?>">
+        <?php foreach ($rsInlineOffer as $iOffr):?>
+            <li class="item product product-item">
+                <div class="product-item-info" id="product-item-info_9309" data-container="product-grid">
+                                                            <span class="product-image-container product-image-container-9309" style="width: 240px;">
+    <span class="product-image-wrapper" style="padding-bottom: 125%;">
+        <img class="product-image-photo-o" src="<?= $iOffr['logoUrl']?>" loading="lazy" width="240" height="300" alt="Crowne Plaza Queenstown"></span>
+</span>                    <div class="product details product-item-details">
+                        <strong class="product name product-item-name">
+                            <?= $iOffr['advertiserName'];?>                        </strong><p class="text-center">   <?= $iOffr['offerTitle'];?>    </p>
+
+                        <div class="product-item-name">
+                            <div class="price-box price-final_price" data-role="priceBox" data-product-id="9309" data-price-box="product-id-9309">
+    <span class="special-price">
+
+
+<span class="price-container price-final_price tax weee">
+            <span class="price-label">  <?= $iOffr['advertiserName'];?> </span>
+        <span id="product-price-9309" data-price-amount="109" data-price-type="finalPrice" class="price-wrapper "><span class="price"><?= __('InStore')?></span></span>
+        </span>
+    </span>
+
+                            </div>                        </div>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+
+
+                                    <div class="earning-product-list">Shop, Save, Earn <br>&amp; Support a Cause</div>
+                                    <div class="framelogin" style="color: red;float: left;width:100%;">
+                                        <?php if($isLoggedIn){ ?>
+                                            <a href="<?= $this->getUrl()."in-offers?id=".$iOffr['offerId']?>" target="_blank" class="btn btn--wd">
+                                                <?= 'View Offer'; ?></a>
+                                        <?php }else{ ?>
+                                            <a href="<?= $block->escapeUrl($block->getUrl('customer/account/login', ['referer' => base64_encode($this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]))])); ?>" class="btn btn--wd"> <?= $btnTitle; ?></a>
+
+                                        <?php } ?></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+        <?php
+            else:
+            echo 'No InStore Offer found';
+        endif;?>
+    <?php if($isLoggedIn && $cToken) { ?>
+            <?php if(!isset($_REQUEST['query'])){ ?>
+        <h2 class="md-title" style="display:<?php echo  $flag == 1 ? 'none':'block';?>" ><?= __('Grouped Offers')?></h2>
+      <?php  } ?>
+
+             <?php if($cateid == '712'){ ?>
+            <ol class="products list items product-items md">
+
+                <?php if(!empty($getAssoc)): ?>
+                        <?php foreach ($getAssoc as $on):?>
+                            <li class="item product product-item">
+                                <div class="product-item-info" id="product-item-info_9309" data-container="product-grid">
+                                                                <span class="product-image-container product-image-container-9309" style="width: 240px;">
+        <span class="product-image-wrapper" style="padding-bottom: 125%;">
+            <img class="product-image-photo-o" src="<?= $on['logo']?>" loading="lazy" width="240" height="300" alt="Crowne Plaza Queenstown"></span>
+    </span>                    <div class="product details product-item-details">
+                                        <strong class="product name product-item-name">
+                                            <?= $on['name']?>             </strong><p class="text-center"> </p>
+
+                                        <div class="product-item-inner">
+                                            <div class="product actions product-item-actions">
+                                                <div class="actions-primary">
+
+                                    <input type="hidden" name="cause_id" id="cause_id" value="<?= $on['id'];?>">
+
+                                    <?php $chUrl = 'https://points4purpose.com.au/customer/account/?selected_charity='. $on['name'];?>
+                                                    <a href="#" class="action primary charity" data-id="<?= $on['name'];?>"><span>Select Cause</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ol>
+             <?php }else{ ?>
+
+    <ol class="products list items product-items md">
+        <?php if(!empty($rsInStoreOffer)): ?>
+    <?php foreach ($rsInStoreOffer as $key => $online):?>
+        <?php foreach ($online as $on):?>
+            <li class="item product product-item">
+                <div class="product-item-info" id="product-item-info_9309" data-container="product-grid">
+                                                                <span class="product-image-container product-image-container-9309" style="width: 240px;">
+        <span class="product-image-wrapper" style="padding-bottom: 125%;">
+            <img class="product-image-photo-o" src="<?= $on['logoUrl']?>" loading="lazy" width="240" height="300" alt="Crowne Plaza Queenstown"></span>
+    </span>                    <div class="product details product-item-details">
+                        <strong class="product name product-item-name">
+                            <?= $on['advertiserName']?>             </strong><p class="text-center">   <?= $on['offerTitle']?>   </p>
+
+                        <div class="product-item-name">
+                            <div class="price-box price-final_price" data-role="priceBox" data-product-id="9309" data-price-box="product-id-9309">
+        <span class="special-price">
+
+
+    <span class="price-container price-final_price tax weee">
+
+            <span id="product-price-9309" data-price-amount="109" data-price-type="finalPrice" class="price-wrapper "><span class="price"><?= __('In Store')?></span></span>
+            </span>
+        </span>
+
+                            </div>                        </div>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+
+
+                                    <div class="earning-product-list">Shop, Save, Earn <br>&amp; Support a Cause</div>
+                                    <div class="framelogin" style="color: red;float: left;width:100%;">
+                                        <a href="<?= $this->getUrl()."in-offers?id=".$on['offerId']?>" target="_blank" class="btn btn--wd">
+                                            <?= 'View Offer'; ?></a></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+        <?php endif; ?>
+    </ol>
+    <?php }} ?>
+
+</div>
+    <?php endif; ?>
+<?php else: ?>
+    <?= $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() === 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    
+    <?= $block->getToolbarHtml() ?>
+    <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+        <ol class="products list items product-items">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product): ?>
+            <li class="item product product-item">
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    <?= $productImage->toHtml() ?>
+                    <div class="product details product-item-details">
+                        <?php $_productNameStripped = $block->stripTags($_product->getName(), null, true); ?>
+                        <strong class="product name product-item-name">
+                            <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?>
+                        </strong>
+
+			<div class="product-item-name">
+                        	<?php /* @escapeNotVerified */ 
+
+
+                          if ( strpos($block->getProductPrice($_product),'$0.00') === false){
+							  if ( strpos($block->getProductPrice($_product),'$0') === false){
+							 
+                        	  	echo $block->getProductPrice($_product);
+							  }
+					      }
+
+                          //echo $block->getProductPrice($_product);
+                          ?>
+                        </div>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                        <?php 
+										$productnamer='';
+										if($isLoggedIn) {  ?>
+                                        <?php
+             $productnamer = $_productNameStripped;
+             if($selcharpage) {  ?>
+
+                                    <input type="hidden" name="cause_id" id="cause_id" value="<?= $_product->getId();?>">
+
+                                    <?php $chUrl = 'https://points4purpose.com.au/customer/account/?selected_charity='.$productnamer; ?>
+             <a href="#" class="action primary charity" data-id="<?php echo $productnamer;?>"><span>Select Cause
+
+            <?php } else { 
+
+$afferURL =  $_product->getData('affiliate_url');
+//UniqueID=P0000000001317
+if (!empty($afferURL))
+{
+
+
+if (str_contains("?", $afferURL)) {
+
+$whole_url  = explode("?",$afferURL);
+$whole_url1 = $whole_url[0];
+$whole_url2 = $whole_url[1];
+
+}else{
+
+$whole_url1 = $afferURL;
+
+}
+
+}else{
+$afferURL = "https://blah";
+}
+
+
+//var_dump($whole_url ); P0000000001317
+//https://agoda.uzvs.net/c/1388660/573206/8884?subID1=P0000000001317
+$thecustID = str_pad($thecustID, 13, '0', STR_PAD_LEFT);
+//2022 changed to go to admin
+
+
+$whole_url_link = @$whole_url1."?UniqueID=P$thecustID&".@$whole_url2;
+
+//$whole_url_link = '/dadmin/catalog/product/edit/id/'.$_product->getId();
+
+
+//echo "string".$_product->getData('affiliate_url');
+                ?>
+
+<?php if (!empty($cardslist)) { ?>
+    <div class="earning-product-list">Shop, Save, Earn <br>&amp; Support a Cause</div>
+    <a href="<?= $whole_url_link ?>" target="__blank" class="action primary"><span><?= $btnTitle ?>
+<?php } else { ?>
+    <div class="earning-product-list">Shop, Save, Earn <br>&amp; Support a Cause</div>
+    <a href="javascript:void(null)"  class="action primary nocarlink"><span><?= $btnTitle ?>
+<?php } ?>           
+    <?php } ?>
+    </span></a>
+    <?php } else { ?>
+
+        <?php if(strpos($whereweare, "select-charity") || strpos($whereweare, "682") || strpos($whereweare, "cause") || $whereweare == 'yes') { 
+            $text = ""; ?>   
+               <div class="earning-product-list"><?php echo $text; ?></div>
+        <?php } else {
+            $text = "Shop, Save, Earn <br>&amp; Support a Cause"; ?> 
+        <div class="earning-product-list"><?php echo $text; ?></div>
+        <?php }  ?>
+        <div class="framelogin" style="color: red;float: left;width:100%;">
+            <a href="<?= $block->escapeUrl($block->getUrl('customer/account/login', ['referer' => base64_encode($this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]))])); ?>" class="btn btn--wd">
+       									
+            <?php if(!empty($csLabel)) { echo __('Sign in to Support');}else{ echo __('Sign in to Shop');}?></a></div>
+            </a>
+    <?php } ?>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <?= strpos($pos, $viewMode . '-actions') ?
+        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        $position,
+        'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+        ) : '' ?>
+    </li>
+
+    <?php endforeach; ?>
+
+
+    </ol>
+    </div>
+    <?= $block->getToolbarHtml() ?>
+    <?php if (!$block->isRedirectToCartEnabled()): ?>
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+                    "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
+                }
+            }
+        }
+
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
+
+<script>
+
+  require(['jquery'],function($){
+       $(document).ready(function(){
+  $(".nocarlink").on("click",function(){
+    //alert('gggg');
+    $(".newoverlay").css("display","block")
+
+});
+   });
+
+});
+var pageBit = document.querySelector(".pages");
+var breadcrumbsBit = document.querySelector(".breadcrumbs");
+breadcrumbsBit.appendChild(pageBit.cloneNode(true));
+</script>
+
+
+<style>
+  .newoverlay {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+}
+
+   .newoverlaytext {
+    background: #8b8b8b;
+    padding: 20px;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    top: 150px;
+    
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 999;
+    width:325px;
+    border-radius:5px;
+}
+
+   .newclosebtn{
+    position:absolute;
+    top: 10px;
+    right:10px;
+    color:#fff;
+   }
+   
+   .sidebar.sidebar-main.hidesidebar
+   {
+	   display:none;
+   }
+   .column.main.fullwidth{
+	   width: 100%;
+    float: none;
+}
+</style>
+
+<div class="newoverlay" style="display: none;">
+  <div class="newoverlaytext">
+      <p>Please link at least one payment card.</p>
+      <a class="newclosebtn" style="color:#fff" href="<?php echo $this->getUrl();?>customization/points4purpose/payment">X</a>
+  </div>
+</div>
+
+<div id="popup-modal" style="display:none;" class="charitysuccess">
+    <div class="text-center">
+        <div class="divider divider--xs"></div>
+        <p class="msg-success">Successfully added to your profile.</p>
+        <div class="divider divider--xs"></div>
+
+        <a href="<?= $this->getUrl();?>customization/charity/" class="btn btn--wd  wishlist-hide go-to-profile-link">Go to Profile</a>
+        <div class="divider divider--xs wishlist-hide"></div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+        require(
+        [
+        'jquery',
+        'Magento_Ui/js/modal/modal'
+        ],
+        function(
+        $,
+        modal
+        ) {
+        var options = {
+        type: 'popup',
+        responsive: true,
+        innerScroll: true
+    };
+
+        var popup = modal(options, $('#popup-modal'));
+        $(".charity").on('click',function(){
+			
+			<?php $chUrl = $this->getUrl().'customization/charity/charityupdate'; ?>
+			
+			var charity = $(this).attr('data-id');
+            var causeId = $('#cause_id').val();
+			
+            $.ajax({
+                type: "POST",
+                url: "<?php echo $chUrl;?>",
+                data: 'selected_charity='+charity+'&cause_id='+causeId,
+                cache: false,
+                success: function(result){
+                   // alert(result);
+				   
+				   $("#popup-modal").modal("openModal");
+                }
+            });
+
+          //  $.get('<?php echo $chUrl ?>',function(){
+            });
+
+       // $("#popup-modal").modal("openModal");
+    });
+
+  
+
+
+require([
+        'jquery'
+],
+function ($) {
+	 
+	
+	<?php if($cateid == '682') {?>
+		
+		jQuery('.sortfilter .sorter-options option').text('Cause');
+		jQuery('.column.main #amasty-shopby-product-list .toolbar-products .sorter-options option').text('Cause');
+		
+		<?php }else{ ?> 
+		jQuery('.sortfilter .sorter-options option').text('Store');
+		jQuery('.column.main #amasty-shopby-product-list .toolbar-products .sorter-options option').text('Store');
+		<?php }	?>	
+			
+      //  $(".categorybuttonass").click(function(){
+			 $('body').on('click',".categorybuttonass",function(){
+			
+		//$('body').on('click','')	
+		
+		if($('.sidebar.sidebar-main').hasClass('hidesidebar'))
+		{
+			//alert('dsfsddsf');
+			$('.sidebar.sidebar-main').removeClass('hidesidebar');
+			$('.column.main').removeClass('fullwidth');
+		}
+		else
+		{
+			$('.sidebar.sidebar-main').addClass('hidesidebar');
+			$('.column.main').addClass('fullwidth');
+		}
+			
+		//	alert('jakkers');
+		});
+		
+		
+		
+				
+			//	alert('ddd');
+				
+				
+				
+			
+			
+    });
+	
+
+window.addEventListener("load", function(){
+setTimeout(function(){
+	
+	//jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes').html(' ');
+	
+	setInterval(function () {
+			if(jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes-mode').hasClass('active'))
+				{
+					var dataval = jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes-mode.active').attr('data-value');
+					console.log(dataval);
+					//if(dataval == 'list'){
+						console.log('change');
+						var modeshtml = jQuery('.column.main #amasty-shopby-product-list .toolbar-products').html();
+						jQuery('.sortfilter #amasty-shopby-product-list .toolbar-products').html(modeshtml);
+						
+						
+					/*	var modeshtml = jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes').html();
+						jQuery('.sortfilter #amasty-shopby-product-list .toolbar-products .modes').html(modeshtml);*/
+						
+					//	clearInterval();
+					//}
+		}
+		
+		}, 5000);
+		
+		
+	//	jQuery('.sortfilter #amasty-shopby-product-list .toolbar-products .modes a').click(function(){
+			
+			jQuery('body').on('click', '.sortfilter #amasty-shopby-product-list .toolbar-products .modes a', function(){
+			var attrid =jQuery(this).attr('id');
+				 jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes a#'+attrid).click();
+			});
+			
+			
+			
+			jQuery('body').on('click', '.sortfilter #amasty-shopby-product-list .toolbar-products .pages a', function(){
+			var attrid =jQuery(this).attr('href');
+			//alert(attrid);
+		
+				jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes a').each(function(){
+					
+					if(jQuery(this).attr('href') == attrid){
+							jQuery(this).trigger();
+						}
+					});
+		
+			//	 jQuery('.column.main #amasty-shopby-product-list .toolbar-products .modes a#'+attrid).click();
+			});
+			
+			
+			
+		
+			
+		
+ }, 1500);
+		  
+		 	
+	});
+
+
+	
+</script>
+
+

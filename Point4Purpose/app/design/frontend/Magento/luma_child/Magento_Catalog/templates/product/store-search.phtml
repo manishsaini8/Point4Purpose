@@ -1,0 +1,45 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+//$whereweare = $block->getRequest()->getParam('id');
+$whereweare = $block->getUrl();
+//$query = ['str1' => 'value1', 'str2' => 'value2',];
+$whereweare = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+
+echo $this->getRequest()->getParam('cat');
+
+if (strpos($whereweare, "select-charity") || strpos($whereweare, "682")){
+$whereweare = 'yes';
+$selcharpage = 1;
+//<style>dli.[data-label]:first-of-type {display:none;} <style>
+                                                         echo '<h2 class="title-page ">Select the cause of your choice</h2>
+    <div class="container searchbit" ><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="/catalogsearch/result/" method="get" _lpchecked="1"><div class="outerinput">
+                                                                                                                                                                                                                <input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for causes" maxlength="128"></div>
+                                                                                                                                                                                                                                                                                                                                              <input type="hidden" name=cat value=682><button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <div class="cant-find"><p>Can\'t find you Charity? <a id="categorySearchBtn" href="/charitysuggestion">Click here</a></p></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <style>.title-page{  text-align: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              color: #0096a5!important;}.page-title-wrapper{display:none;}.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}.searchbit{text-align: center;}.outerinput{max-width: 400px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 display: inline-block;}.sbut{height: 30px!important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-bottom: 4px!important;}</style>';
+}else{
+$whereweare = 'no';
+$selcharpage = 0;
+
+
+
+////////////////////////////////////////
+//// COUNt IT USING JS on Frontend ////
+//////////////////////////////////////
+
+// echo 'noncharstuff';
+//echo $count_productCollection.'Items';
+echo '<div class="container searchbit ddd"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="/catalogsearch/result/" method="get" _lpchecked="1">
+            <div class="outerinput"><input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for a store" maxlength="128"></div>
+            <input type="hidden" name=cat value=644><button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>
+
+<style>.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}.searchbit{text-align: center;}.outerinput{max-width: 400px;
+                                                                                                                                              display: inline-block;}.sbut{height: 30px!important;
+                                                                                                                                                                         margin-bottom: 4px!important;}</style>';
+}
+

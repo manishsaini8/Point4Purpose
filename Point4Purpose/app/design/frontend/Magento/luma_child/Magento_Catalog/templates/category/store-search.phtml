@@ -1,0 +1,104 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+
+//$whereweare = $block->getRequest()->getParam('id');
+
+if($customerSession->isLoggedIn()) {
+    $thecustID = $customerSession->getCustomer()->getId();
+    $customerSession->getCustomer()->getName();
+    $customerSession->getCustomer()->getEmail();
+    //$cToken = $customerSession->getCustomer()->getCardToken();
+    $cToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSIsIlNlc3Npb25LZXkiOiI0YWIzNjM2Ni0wODYwLTRkMmUtOTI5Yy05OTgzNjRmMDE2NjYiLCJVc2VySWQiOiIxNTUwMDEwIiwiTmV0d29ya0lkIjoiYTllMDFhODEtYTI3My00ZTc1LTg1ODMtZWRmNjVhYjY3NWY4IiwiUG9raXRQYWwuQWNjZXNzVHlwZXMiOiJQb2tpdFBhbC5BcGkiLCJQb2tpdFBhbC5BY2Nlc3NSb2xlIjoiVXNlciIsImV4cCI6MTY2MTA4MTY1NSwiaXNzIjoiUG9raXRQYWwiLCJhdWQiOiJtaXRoaWxjaGF1aGFuQGdtYWlsLmNvbSJ9.GOa2CXv7fHQ0qNboGWYZtgyQ2-hBZ5S18JvDZDAfR1M';
+    $customerSession->getCustomer()->getGroupId(); // get Customer Group Id
+
+    if(!empty($token)) {
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://api.pokitpal.com/v1/Offers/GetAllCategories",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json",
+                "Authorization: Bearer $cToken"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+
+        $allCat = json_decode($response, true);
+        $ctr = $allCat['categories'];
+    }
+/*    print_r($ctr);
+    die;*/
+}
+
+$whereweare = $block->getUrl();
+//$query = ['str1' => 'value1', 'str2' => 'value2',];
+$whereweare = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+
+if (strpos($whereweare, "select-charity") || strpos($whereweare, "682") || strpos($whereweare, "cause")){
+    $whereweare = 'yes';
+    $selcharpage = 1;
+//<style>dli.[data-label]:first-of-type {display:none;} <style>
+    echo '<h2 class="title-page ">Select the Cause of your choice</h2>
+    <div class="container searchbit"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form"  method="get" _lpchecked="1"><div class="outerinput">
+                                                                                                                                                                                                                <input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for Cause" maxlength="128"></div>
+                                                                                                                                                                                                                                                                                                                                              <button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form>  <div class="cant-find"><p>Can\'t find your Cause? <a id="categorySearchBtn" href="/charitysuggestion">Click here</a></p></div></div></div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <style>.title-page{  text-align: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              color: #0096a5!important;}.page-title-wrapper{display:none;}/*.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}*/.searchbit{text-align: center;}.outerinput{max-width: 400px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 display: inline-block;}.sbut{height: 30px!important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin-bottom: 4px!important;}</style>';
+}else {
+    $whereweare = 'no';
+    $selcharpage = 0;
+
+    $ct = $this->getRequest()->getParam('cat');
+////////////////////////////////////////
+//// COUNt IT USING JS on Frontend ////
+//////////////////////////////////////
+
+// echo 'noncharstuff';
+//echo $count_productCollection.'Items';
+
+
+    if ($ct == 710) {
+        echo '<div class="container searchbit"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="/rewards-shop.html?" method="get" _lpchecked="1">
+            <div class="outerinput"><input type="text" class="input--full" autocomplete="off" value="" name="query" placeholder="Search for an Offer" maxlength="128"></div>
+            <input type="hidden" name=cat value='.$ct.'>';
+
+        if($customerSession->isLoggedIn() && !empty($ctr)) {
+            echo '<select class="form-select sel-cate-dropdown" name="categoryId">';
+            echo '<option value="" selected >Select Category</option>';
+            foreach ($ctr as $ctt) {
+                echo '<option value=' . $ctt['id'] . '>' . $ctt['name'] . '</option>';
+            }
+            echo '</select>';
+        }
+           echo '<button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>';
+            echo '<style>/*.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}*/.searchbit{text-align: center;}.outerinput{max-width: 400px;
+                                                                                                                                              display: inline-block;}.sbut{height: 30px!important;
+                                                                                                                                                         margin-bottom: 4px!important;}</style>';
+            if(isset($_REQUEST['query'])){
+                echo '<div class="q-back"><a href='.$this->getUrl()."rewards-shop.html?cat=710".'>Back</a></div>';
+            }
+
+    } else {
+        echo '<div class="container searchbit"><div class="searchinner"><form id="pg-categorysearch-form" class="category-search-form" action="" method="get" _lpchecked="1">
+            <div class="outerinput"><input type="text" class="input--full" autocomplete="off" value="" name="q" placeholder="Search for a store" maxlength="128"></div>
+            <input type="hidden" name=cat value=644><button class="btn btn--wd wave waves-effect waves-effect waves-effect sbut" type="submit">Search</button></form></div></div>
+
+<style>/*.items.am-filter-items-attr_category_ids.am-labels-folding li:nth-child(2){display: none!important;}*/.searchbit{text-align: center;}.outerinput{max-width: 400px;
+                                                                                                                                              display: inline-block;}.sbut{height: 30px!important;
+                                                                                                                                                         margin-bottom: 4px!important;}</style>';
+    }
+}
+

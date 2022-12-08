@@ -1,0 +1,491 @@
+
+
+<br>
+<style type="text/css">
+ .cardscontent img {
+    max-width: 60px;
+    height: auto;
+    border: 0;
+}
+#anchorid  form> div:last-child {
+      display:none !important;
+    } 
+</style>
+<h4 style="
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24px;
+">
+
+<?php 
+//error_reporting(E_ERROR);
+$host = $_SERVER['SERVER_NAME'];
+
+if($host == 'm2.points4purpose.com.au')
+{
+
+
+//echo 'Link your card and earn cash rewards whenever you shop!<br>Securely link your Visa or Mastercard credit or debit cards to your Points4Purpose account below and you’ll earn cashback automatically whenever you use your chosen card to pay at  participating shops, cafes and restaurants.</h4>';
+
+}
+?>
+
+<br>
+<?php
+@include '/home/m2p4p/m2.points4purpose.com.au/loapi.ini';
+
+	$objm = \Magento\Framework\App\ObjectManager::getInstance();
+ $customerSession = $objm->get('Magento\Customer\Model\Session');
+
+$customerID = $customerSession->getCustomer()->getId();
+
+//echo $customerID;
+
+
+
+# x-api-key
+#When using the publishable API the authorization header is x-publishable-api-key
+
+
+
+//echo "<br><br>";
+
+//rewardAccountrewardAccount
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (isset($_GET['del'])){
+
+
+$delthiscard = $_GET['del'];
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "$dURL/api/public/cards/$delthiscard",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "DELETE",
+  CURLOPT_HTTPHEADER => [
+    "Accept: text/plain",
+    "x-api-key: $loapikey"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+  header('Location: https://points4purpose.com.au/customization/points4purpose/payment/'); exit;
+}
+
+
+}
+
+
+
+
+//$addressId = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping();
+
+
+
+$addressId = 1;
+
+
+if ($addressId){
+    //$address = Mage::getModel('customer/address')->load($addressId);
+    //echo $customerPostcode = $address->getData('postcode');
+ // echo $addressId;
+  //echo $loapikey;
+}
+//echo $address->getData('postcode');
+
+$curl = curl_init();
+//$loapikey = '574b94f840f844b683d91c53277a52b223'; //Our Demo Key
+//$loapikey = '5e6790ad6a44445c9158beffa391f78e12'; //Their Key
+//$dUser = '132532623623'; //My user
+//$dUser = '5876587658765876'; //Their Andrew Norman user
+
+ //$customerID = 1317;
+
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "$dURL/api/public/members/$customerID/cards",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "GET",
+  CURLOPT_HTTPHEADER => [
+    "Accept: text/plain",
+    "x-api-key: $loapikey"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+echo $err;
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+//  echo $response;
+//echo $loapikey;
+//echo $dURL;
+ }
+
+//echo $response;
+
+curl_close($curl);
+
+
+//echo "$customerID";
+
+
+?>
+<style>
+
+.close-button {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+display: flex;
+-webkit-box-align: center;
+align-items: center;
+-webkit-box-pack: center;
+justify-content: center;
+width: 23px;
+height: 23px;
+position: absolute;
+z-index: 1;
+top: 15px;
+right: 15px;
+cursor: pointer;}
+.card-item {
+      display: inline-block;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+box-sizing: border-box;
+border-radius: 10px;
+background-image: linear-gradient(180deg,#abaeaf,#575b5c);
+padding: 25px;
+color: #fff;
+margin-bottom: 30px;
+width: 328px;
+height: 187px;
+position: relative;
+}
+.mc-icon,.v-icon{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+border-style: none;
+vertical-align: middle;
+width: 45px;
+}
+.card-number {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+display: flex;
+-webkit-box-align: center;
+align-items: center;
+font-size: 18px;
+line-height: 1.4;
+margin-bottom: 16px;
+font-weight: 200;}
+.card-wrap {-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+font-weight: 400;
+line-height: 1.4;
+font-size: 16px;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+margin-bottom: 28px;
+padding-top: 58px;}
+.card-label {
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+visibility: visible;
+color: #fff;
+box-sizing: border-box;
+font-size: 7px;
+line-height: 1.4;
+display: block;
+margin-bottom: 5px;
+letter-spacing: 1.4px;
+text-transform: uppercase;
+font-weight: 400;
+}
+.symbol {
+
+--font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+--font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+text-align: left;
+font-family: Montserrat,sans-serif;
+letter-spacing: .025em;
+visibility: visible;
+color: #fff;
+font-size: 18px;
+line-height: 1.4;
+font-weight: 600;
+box-sizing: border-box;
+margin-right: 10px;
+}
+
+.row-center {
+  text-align:center;
+}
+@media (max-width:999px){
+.col-center {
+  display:inline-block;
+  float:none;
+  text-align:center;
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
+        text-align: center;
+}
+}
+</style>
+
+
+
+<?php
+
+
+if ($err) {
+  echo "cURL sError #:" . $err;
+} else {
+    $cardslist = json_decode($response);
+
+ //echo "Cardsssssssssss: ".$cardslist." < thats all we got";
+ //  print_r(json_decode($cardslist));
+ //   echo "<pr>".$response."<pr>";
+//  print_r(json_decode($cardslist, true));
+
+
+
+  foreach($cardslist as $i => $i_value) {
+    $dateex = date('Y-m-d', strtotime($i_value->dateAdded));
+$firstsix = $i_value->firstSix;
+
+    echo "
+    <div class='col-md-6 col-centered'>
+<div class='card-item'><span class='close-button'><a href='?del=".$i_value->cardId."'><img _ngcontent-serverapp-c139='' src='/assets/img/settings/close-icon.svg'></a></span><div _ngcontent-serverapp-c139='' class='logo'><!----><img src=";
+ // echo $firstsix;
+if (strpos($firstsix, '5') === 0) {
+echo " '/assets/img/in-store/mastercard-icon.png' ";
+}
+if (strpos($firstsix, '4') === 0)
+{
+echo "/assets/img/in-store/visa.png";
+}
+echo " class='mc-icon'>
+  <!----></div><div _ngcontent-serverapp-c139='' class='card-wrap'><div _ngcontent-serverapp-c139='' class='card-number'><span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span><span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span><span _ngcontent-serverapp-c139='' class='symbol'>- - - -</span><span _ngcontent-serverapp-c139='' class='txt'>".$i_value->lastFour."</span></div></div><div _ngcontent-serverapp-c139='' class='card-date'><label _ngcontent-serverapp-c139='' class='card-label'>Date added  </label> ".date( "jS M, Y", strtotime($i_value->dateAdded) )."</div></div></div>
+";
+  /*
+  echo  "<div class='cardslist cardscontent '><div class='logoleft'>";
+
+if (strpos($firstsix, '4') === 0) {
+   // It starts with 'http'
+  echo '<svg width="3em" height="2em" viewBox="0 0 24 16" style="display: inline-block;"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="New-Icons" transform="translate(-80.000000, -280.000000)" fill-rule="nonzero"><g id="Card-Brands" transform="translate(40.000000, 200.000000)"><g id="Color" transform="translate(0.000000, 80.000000)"><g id="Visa" transform="translate(40.000000, 0.000000)"><rect stroke-opacity="0.2" stroke="#000000" stroke-width="0.5" fill="#FFFFFF" x="0.25" y="0.25" width="23.5" height="15.5" rx="2"></rect><path d="M2.78773262,5.91443732 C2.26459089,5.62750595 1.6675389,5.39673777 1,5.23659312 L1.0280005,5.1118821 L3.76497922,5.1118821 C4.13596254,5.12488556 4.43699113,5.23650585 4.53494636,5.63071135 L5.12976697,8.46659052 L5.31198338,9.32072617 L6.97796639,5.1118821 L8.77678896,5.1118821 L6.10288111,11.2775284 L4.30396552,11.2775284 L2.78773262,5.91443732 L2.78773262,5.91443732 Z M10.0999752,11.2840738 L8.39882877,11.2840738 L9.46284763,5.1118821 L11.163901,5.1118821 L10.0999752,11.2840738 Z M16.2667821,5.26277458 L16.0354292,6.59558538 L15.881566,6.53004446 C15.5737466,6.40524617 15.1674138,6.28053516 14.6143808,6.29371316 C13.942741,6.29371316 13.6415263,6.56277129 13.6345494,6.82545859 C13.6345494,7.11441463 13.998928,7.3048411 14.5939153,7.58725177 C15.5740257,8.02718756 16.0286384,8.56556562 16.0218476,9.26818871 C16.0080799,10.5486366 14.8460128,11.376058 13.0610509,11.376058 C12.2978746,11.3694253 11.5627918,11.2180965 11.163808,11.0475679 L11.4018587,9.66204513 L11.6258627,9.76066195 C12.1788958,9.99070971 12.5428092,10.0889775 13.221984,10.0889775 C13.7117601,10.0889775 14.2368857,9.89837643 14.2435835,9.48488392 C14.2435835,9.21565125 14.0198586,9.01850486 13.3617074,8.7164581 C12.717789,8.42086943 11.8568435,7.92848346 11.8707973,7.04197926 C11.8780532,5.84042483 13.0610509,5 14.7409877,5 C15.3990458,5 15.9312413,5.13788902 16.2667821,5.26277458 Z M18.5277524,9.0974856 L19.941731,9.0974856 C19.8717762,8.78889347 19.549631,7.31147374 19.549631,7.31147374 L19.4307452,6.77964104 C19.3467437,7.00942698 19.1998574,7.38373457 19.2069273,7.37055657 C19.2069273,7.37055657 18.6678479,8.74290137 18.5277524,9.0974856 Z M20.6276036,5.1118821 L22,11.2839865 L20.4249023,11.2839865 C20.4249023,11.2839865 20.2707601,10.5748181 20.221922,10.3581228 L18.0377903,10.3581228 C17.9746264,10.5221933 17.6807607,11.2839865 17.6807607,11.2839865 L15.8957988,11.2839865 L18.4226343,5.62399144 C18.5977072,5.22341512 18.9059917,5.1118821 19.3117663,5.1118821 L20.6276036,5.1118821 L20.6276036,5.1118821 Z" id="Shape" fill="#171E6C"></path></g></g></g></g></g></svg>';
+}
+ if (strpos($firstsix, '5') === 0) {
+   // It starts with 'http'
+  echo '<svg width="3em" height="2em" viewBox="0 0 24 16" style="display: inline-block;"><g fill="none" fill-rule="evenodd"><rect fill="#252525" height="16" rx="2" width="24"></rect><circle cx="9" cy="8" fill="#eb001b" r="5"></circle><circle cx="15" cy="8" fill="#f79e1b" r="5"></circle><path d="m12 3.99963381c1.2144467.91220633 2 2.36454836 2 4.00036619s-.7855533 3.0881599-2 4.0003662c-1.2144467-.9122063-2-2.36454837-2-4.0003662s.7855533-3.08815986 2-4.00036619z" fill="#ff5f00"></path></g></svg>';
+}
+
+   echo "</div><span class='cctx'> Ending with </span><span class='cctxdollars'>".$i_value->lastFour."</span>";
+    echo " Exp. ".$i_value->expiryDate;
+    echo "<span class='cctxadded'> <br>added".date( "F j, Y, g:i a", strtotime($i_value->dateAdded) )."</span>";
+    echo "</div>";
+    */
+}
+
+//  memberDetails:{"postCode":"2000","email":"adam@gmail.com"},
+
+echo "<p></p><div style='clear:both'></div>";
+
+if (empty($cardslist)) {
+echo "<center><h2 style='
+    font-size: 20px;max-width: 600px;
+'>Link your card and earn cash rewards whenever you shop! <br>Securely link your Visa or Mastercard credit or debit cards to your account and you’ll earn cashback automatically whenever you use your chosen card to pay at participating shops, cafes and restaurants.</h2></center>";
+}else{
+  echo "<h2>Link another card</h2>";
+}
+
+
+
+
+
+echo "<p></p></center>
+<div id=anchorid class=cardscontent></div>";
+
+}
+
+
+
+//echo  $customer->getEmail().", ".$customerData->getFirstname().", ". $customer->getLastname().", ". $customer->getId().", ". $customer->getZip();
+//echo "<pre>";
+//echo getEstimatePostcode();
+
+
+//$customerID = $customerData->getId();
+//$customerAddy = getShippingAddress();
+//echo print_r($customerAddy);
+//echo $customerData->getFirstname();
+//echo $customerData->getLastname();
+//echo print_r($customerData);
+
+//echo var_dump($customer->getData()) ;
+//echo "</pre>";
+
+
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "$dURL/api/public/members/$customerID",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  //CURLOPT_POSTFIELDS => "{\"givenName\":\"$customerData->getFirstname()\",\"surName\":\"$customerData->getLastname()\",\"postcode\":\"$customerPostcode\"}",
+  CURLOPT_CUSTOMREQUEST => "PATCH",
+  CURLOPT_HTTPHEADER => [
+    "Accept: text/plain",
+    "Content-Type: application/*+json",
+    "x-api-key: $loapikey"
+  ],
+]);
+//{"firstName":"Somef","lastName":"SomeL","postcode":"2000","mobile":"01022222222"}
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  //echo $response;
+}
+
+
+
+
+
+
+?>
+<style>
+    .logoleft{
+      width:45px;
+      float:  left;
+      posiion:absolute;
+    }
+    .cctx
+    {
+      font-size: 18px;
+      color: #777777;
+    }
+    .cctxadded
+    {
+      font-size: 14px;
+      color: #777777;
+    }
+    .cctxdollars
+    {
+      font-size: 18px;
+      color: black;
+    }
+    .cardscontent, .cardscontent div {
+    margin: 0 auto;
+  
+}
+
+.cardslist {background: #f0f0f0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 6px;
+    border-radius: 8px;}    
+
+    #anchorid p:last-child {
+      display: none;
+    }
+    #anchorid form + span {
+      display: none;
+    }
+
+    </style>
+
+
+
+
+
+
+

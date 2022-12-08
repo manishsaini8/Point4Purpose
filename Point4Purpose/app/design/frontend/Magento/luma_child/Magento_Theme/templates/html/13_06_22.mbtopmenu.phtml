@@ -1,0 +1,106 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Top menu for store
+ * About us
+Shop
+Redeem voucher
+Sign in
+Register
+
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+?>
+<style type="text/css">
+  li.ui-menu-item.all-category {
+    display: none;
+}
+</style>
+<nav class="navigation-mb" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+    	    <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/about" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>About Us</span>
+            </a>
+        </li>
+      
+        <?= /* @escapeNotVerified */ $_menu ?>
+        <?= /* @escapeNotVerified */ $block->getChildHtml() ?>
+          <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/rewardpointscoupon/check" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Redeem Voucher</span>
+            </a>
+        </li>
+       
+              <?php
+      if  ($isLoggedIn){
+  echo '
+  <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>My Account</span>
+            </a>
+        </li>
+ <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/logout/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Log Out</span>
+            </a>
+        </li>';
+}else{
+   echo '<li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="javascript:void(0)" class="level-top ui-corner-all mbtg" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Sign-In/Register</span>
+            </a>
+
+              <ul class="dropdown-menu" id="mbtogg">
+                <li class="level1 nav-1-1 first">
+                <a href="/customer/account/create/">
+                Individual
+                </a></li><li class="level1 nav-1-2">
+                <a href="/charity-registration">
+                Charity
+                </a></li><li class="level1 nav-1-3">
+                <a href="/business-registration">
+                Business
+                </a>
+                </li>
+              </ul>
+       	 </li>';
+}
+?>
+    </ul>
+</nav>
+
+<script>
+require(['jquery'],function($){  
+
+  jQuery(document).ready(function(){
+	if($( window ).width() < 767) 
+	 {
+		jQuery("#ui-id-2.ui-corner-all").click(function(e){	
+			e.preventDefault();
+		});
+	 }
+	  
+   jQuery(".level-top").click(function(){
+	 //  alert('sdfdf');
+    jQuery(".dropdown-menu").toggle();
+  });
+  });
+
+});
+</script>

@@ -1,0 +1,175 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Top menu for store
+ * About us
+Shop
+Redeem voucher
+Sign in
+Register
+
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+
+
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+
+$catId = 644;  //Parent Category ID
+$subCategory = $objectManager->create('Magento\Catalog\Model\Category')->load($catId);
+$subCats = $subCategory->getChildrenCategories();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<nav class="navigation" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+    	    <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/about" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>About</span>
+            </a>
+        </li>
+
+        <li class="level0 nav-1 category-item first last level-top parent ui-menu-item" role="presentation">
+          <a href="<?=$block->getBaseUrl()?>rewards-shop.html?cat=667" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-2" tabindex="-1" role="menuitem"><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span><span>Shop</span></a>
+
+          <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 48px; left: -0.390625px;" aria-hidden="true">
+            <?php foreach ($subCats as $subcat) { ?>
+             <?php
+              $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcat->getId());
+             ?> 
+            <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation"><a href="<?php echo $subcat->getUrl();?>" id="ui-id-3" class="ui-corner-all" tabindex="-1" role="menuitem"><span><?php echo $subcat->getName();?></span></a>
+            </li>
+            <?php } ?>
+          </ul>
+        </li>
+      
+        
+          <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/rewardpointscoupon/check" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Redeem voucher</span>
+            </a>
+        </li>
+
+        
+       
+              <?php
+      if($isLoggedIn){
+  echo '
+  <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>My Account</span>
+            </a>
+  </li>
+ <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/logout/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Log Out</span>
+            </a>
+
+           
+  </li>';
+}else{
+   echo '<li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/login/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Sign-In/Register</span>
+            </a>
+            <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all submenu-reverse" role="menu" aria-expanded="false">
+
+              <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation">
+              <a href="/customer/account/create/" class="">
+              Individual
+              </a></li><li class="level1 nav-1-1 category-item ui-menu-item" role="presentation">
+              <a href="/charity-registration/" class="">
+              Charity
+              </a></li><li class="level1 nav-1-1 category-item  ui-menu-item" role="presentation">
+              <a href="/business-registration/">
+              Business
+              </a>
+              </li>
+            </ul>  
+       	 </li>';
+}
+?>
+    </ul>
+</nav>
+<div class="header__dropdowns absolute-top">
+    <div class="header__search pull-left display-on-mobil">
+        <a href="#" class="btn dropdown-toggle btn--links--dropdown header__dropdowns__button search-open"><span class="icon icon-search"></span></a>
+    </div>
+</div>
+
+
+<div class="overlay overlay-scale">
+<button type="button" class="overlay-close"> ✕ </button><div class="overlay__content"><form id="search-form" class="search-form outer" action="/catalogsearch/result/" method="get"><div class="input-group input-group--wd">
+<input type="text" class=" input--full" autocomplete="off" id="search" value="" name="q" placeholder="search text here ..." maxlength="128">
+<span class="input-group__bar"></span></div>
+<button type="submit" class="btn btn--wd text-uppercase wave waves-effect waves-effect">Search</button></form></div></div>
+<style type="text/css">
+ .page-header {
+    background-color: #ffffffe3;
+      margin-bottom: 0px !important;
+}
+
+@media (max-width: 768px)
+{
+  .mgz-btn-size-xl .mgz-btn {
+    font-size: 14px!important;
+    padding: 12px 20px!important;
+}
+  .mgz-element-slider .slide-buttons {
+
+    padding-bottom: 25px !important;
+}
+  .slide-heading{
+    margin-bottom: 4px !important;
+  }
+.slide-heading h2{
+  font-size: 26.484px!important;
+    line-height: 33.646px!important;
+}
+}
+@media (min-width: 769px)
+{
+  .nav-1 ul {
+    max-height: 600px;
+    column-count: 3;
+  }
+}
+</style>
+<script type="text/javascript">
+  require(['jquery', 'jquery/ui'], function($){
+  $(document).ready( function() {
+	$(window).scroll(function(){
+		if ($(this).scrollTop() > 50) {
+		   $('.page-header').addClass('newClass');
+		} else {
+		   $('.page-header').removeClass('newClass');
+		}
+	});
+
+  $(".search-open").click(function(){
+    $(".overlay").addClass("open");
+  });
+
+  $(".overlay-close").click(function(){
+    $(".overlay-scale").removeClass('open');
+  });
+  $(document).ready(function(){
+  $(".ui-corner-all").click(function(){
+    $("submenu").slideToggle("slow");
+  });
+});
+  });
+});
+</script>

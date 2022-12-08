@@ -1,0 +1,6 @@
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+?>
+<?php if ($_productCollection->count()): ?>
+<?php echo $block->getToolbarHtml() ?>
+<?php endif; ?>

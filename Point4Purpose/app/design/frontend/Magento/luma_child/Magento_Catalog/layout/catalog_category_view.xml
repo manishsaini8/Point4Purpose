@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+	<!--<move element="product_list_toolbar" destination="content.top" before="-"/>-->
+		
+	<container name="sort.filter.container" htmlTag="div" htmlClass="sortfilter">
+<block class="Magento\Catalog\Block\Category\View" name="custom-category.products" template="Magento_Catalog::category/products.phtml">
+<block class="Magento\Catalog\Block\Product\ListProduct" name="custom-category.products.list" as="product_list" template="Magento_Catalog::product/toolbarcustom.phtml">
+<block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
+<block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+</block>
+<action method="setToolbarBlockName">
+<argument name="name" xsi:type="string">product_list_toolbar</argument>
+</action>
+</block>
+</block>
+</container>
+
+
+<referenceContainer name="columns.top">
+            <container name="category.view.container" htmlTag="div" htmlClass="category-view" after="-">
+                <block class="Magento\Catalog\Block\Category\View" name="category.image" template="Magento_Catalog::category/image.phtml">
+                    <arguments>
+                        <argument name="image" xsi:type="object">Magento\Catalog\ViewModel\Category\Image</argument>
+                        <argument name="output" xsi:type="object">Magento\Catalog\ViewModel\Category\Output</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Catalog\Block\Category\View" name="category.description" template="Magento_Catalog::category/description.phtml"/>
+                <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="store.srch" template="Magento_Catalog::category/store-search.phtml"/>
+            </container>
+        </referenceContainer>
+
+<move element="sort.filter.container" destination="columns.top" after="-"/>
+    </body>
+</page>

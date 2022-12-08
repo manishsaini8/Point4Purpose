@@ -1,0 +1,134 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Top menu for store
+ * About us
+Shop
+Redeem voucher
+Sign in
+Register
+
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+
+
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+?>
+<nav class="navigation" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+    	    <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="#" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>About us</span>
+            </a>
+        </li>
+      
+        <?= /* @escapeNotVerified */ $_menu ?>
+        <?= /* @escapeNotVerified */ $block->getChildHtml() ?>
+          <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="#" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Redeem voucher</span>
+            </a>
+        </li>
+       
+              <?php
+      if  ($isLoggedIn){
+  echo '
+ <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/logout/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Log Out</span>
+            </a>
+        </li>';
+}else{
+   echo '<li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account/login/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Sign-In/Register</span>
+            </a>
+       	 </li>';
+}
+?>
+    </ul>
+</nav>
+<div class="header__dropdowns absolute-top">
+    <div class="header__search pull-left display-on-mobil">
+        <a href="#" class="btn dropdown-toggle btn--links--dropdown header__dropdowns__button search-open"><span class="icon icon-search"></span></a>
+    </div>
+</div>
+
+
+<div class="overlay overlay-scale">
+<button type="button" class="overlay-close"> ✕ </button><div class="overlay__content"><form id="search-form" class="search-form outer" action="/catalogsearch/result/" method="get"><div class="input-group input-group--wd">
+<input type="text" class=" input--full" autocomplete="off" id="search" value="" name="q" placeholder="search text here ..." maxlength="128">
+<span class="input-group__bar"></span></div>
+<button type="submit" class="btn btn--wd text-uppercase wave waves-effect waves-effect">Search</button></form></div></div>
+<style type="text/css">
+ .page-header {
+    background-color: #ffffffe3;
+      margin-bottom: 0px !important;
+}
+
+@media (max-width: 768px)
+{
+  .mgz-btn-size-xl .mgz-btn {
+    font-size: 14px!important;
+    padding: 12px 20px!important;
+}
+  .mgz-element-slider .slide-buttons {
+
+    padding-bottom: 25px !important;
+}
+  .slide-heading{
+    margin-bottom: 4px !important;
+  }
+.slide-heading h2{
+  font-size: 26.484px!important;
+    line-height: 33.646px!important;
+}
+}
+@media (min-width: 769px)
+{
+  .nav-1 ul {
+    max-height: 600px;
+    column-count: 3;
+  }
+}
+</style>
+<script type="text/javascript">
+  require(['jquery', 'jquery/ui'], function($){
+  $(document).ready( function() {
+	$(window).scroll(function(){
+		if ($(this).scrollTop() > 50) {
+		   $('.page-header').addClass('newClass');
+		} else {
+		   $('.page-header').removeClass('newClass');
+		}
+	});
+
+  $(".search-open").click(function(){
+    $(".overlay").addClass("open");
+  });
+
+  $(".overlay-close").click(function(){
+    $(".overlay-scale").removeClass('open');
+  });
+  $(document).ready(function(){
+  $(".ui-corner-all").click(function(){
+    $("submenu").slideToggle("slow");
+  });
+});
+  });
+});
+</script>

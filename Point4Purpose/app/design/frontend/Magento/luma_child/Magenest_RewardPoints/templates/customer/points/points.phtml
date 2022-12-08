@@ -132,7 +132,7 @@ $availPoint = 0;
 
 <div class="reard-info">
     <div class="reward-points-description"><?php echo $block->getDescription(); ?>
-	<br><span style="font-weight: bold;position: relative;top: 8px;">Note: 1 point equal to 1 cent</span>
+	<br><span style="font-weight: bold;position: relative;top: 8px;">Note: 1 Point is equal to 1 Cent</span>
 	</div>
     <?php
     if (empty($block->getDescription())) {
@@ -150,7 +150,7 @@ $availPoint = 0;
 
 <?php
 
- $availPoint = $customer->getPointsCurrent() - $_donation;
+   $availPoint = $customer->getPointsCurrent() - $_donation;
 if($customer->getPointsSpent() == ''){
 	   $withdrawn = '0';
    }else{
@@ -221,7 +221,7 @@ if($customer->getPointsSpent() == ''){
                 
                 <td data-th="<?php echo $block->escapeHtml(__('Pending Points')) ?>" class="col-points-total">
                     <?php //echo  $_pendingPoints; ?>
-					<?php echo $customer->getPointsTotal() - $availPoint; ?>
+					<?php echo $customer->getPointsTotal() -  $customer->getPointsCurrent(); ?>
                 </td>
                 <td data-th="<?php echo $block->escapeHtml(__('Donatio4n Points')) ?>" class="col-points-total">
                     <?php echo  $_donation; ?>

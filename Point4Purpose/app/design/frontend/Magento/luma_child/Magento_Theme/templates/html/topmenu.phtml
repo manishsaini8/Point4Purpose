@@ -1,0 +1,294 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Top menu for store
+ * About us
+Shop
+Redeem voucher
+Sign in
+Register
+
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
+?>
+
+
+<?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
+<?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
+<?php
+
+$x =  explode('/',$this->getUrl('///', ['_current' => true, '_use_rewrite' => true]));
+$routeName = $this->getRequest()->getRouteName();
+$controllerName = $this->getRequest()->getControllerName();
+?>
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+$context = $objectManager->get('Magento\Framework\App\Http\Context');
+$isLoggedIn = $context->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
+
+$catId = 644;  //Parent Category ID
+$subCategory = $objectManager->create('Magento\Catalog\Model\Category')->load($catId);
+$subCats = $subCategory->getChildrenCategories()->addAttributeToSort('name','ASC');
+
+
+$catIdnew = 682;  //Parent Category ID
+$subCategorynew = $objectManager->create('Magento\Catalog\Model\Category')->load($catIdnew);
+$subCatsnew = $subCategorynew->getChildrenCategories()->addAttributeToSort('name','ASC');
+//$product_count = $subCatsnew->getProductCollection()->count();
+
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php 
+/* custom code by manish to get offers category for offer menu-icon*/
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+
+
+$storeManager = $om->get('\Magento\Store\Model\StoreManagerInterface');
+ 
+$baseurl = $storeManager->getStore()->getBaseUrl();
+$customerSession = $om->get('Magento\Customer\Model\Session');
+  $token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+$offercategory='';
+if($customerSession->isLoggedIn()) {
+ $thecustID = $customerSession->getCustomer()->getId(); 
+	
+	//echo "</pre>";
+ $cToken = $customerSession->getCustomer()->getCardToken();
+$token = $cToken;
+				//echo "<pre>";
+				//	print_r($offercategory['categories']);
+				//	echo "</pre>";
+}
+   $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.pokitpal.com/v1/Offers/GetAllCategories",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 30,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Content-Type: application/json",
+            "Authorization: Bearer $token"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+	
+$offercategory = json_decode($response, true);
+$offercategories = $offercategory['categories'];
+
+?>
+<nav class="navigation" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+    	    <li class="level0 nav-7 category-item last level-top ui-menu-item  <?php if($x[3] == 'about'){echo 'active';}else{echo '';} ?>" role="presentation">
+
+
+            <a href="/about" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>About Us</span>
+            </a>
+        </li>
+
+        <li class="level0 nav-1 category-item first last level-top parent ui-menu-item <?php if($x[3] == 'rewards-shop.html?cat=667'){echo 'active';}else{echo '';} ?>" role="presentation">
+          <a href="<?=$block->getBaseUrl()?>rewards-shop.html" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-2" tabindex="-1" role="menuitem"><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span><span>Shop</span></a>
+
+			<?php if(!empty($offercategory)){ ?>
+          <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 48px; left: -0.390625px;" aria-hidden="true">
+            <?php
+				
+					
+			foreach ($offercategories as $offers) { ?>
+             <?php
+               if($offers['name']){
+                ?> 
+            <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation"><a href="<?php echo $baseurl."rewards-shop.html?pcat=".$offers['id'] ?>&cat=642" id="ui-id-3" class="ui-corner-all" tabindex="-1" role="menuitem"><span><?php echo $offers['name'];?></span></a>
+            </li>
+            <?php }else{
+
+               }
+            } ?>
+			</ul>
+			<?php } ?>
+        </li>
+        
+        
+         <li class="level0 nav-1 category-item first last level-top ui-menu-item <?php if($x[3] == 'cause.html'){echo 'active';}else{echo '';} ?>" role="presentation">
+          <a href="<?=$block->getBaseUrl()?>cause.html" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-2" tabindex="-1" role="menuitem"><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span><span class="aa">Your Cause</span></a>
+			<?php /* ?>
+          <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 48px; left: -0.390625px;" aria-hidden="true">
+            <?php foreach ($subCatsnew as $subcatnew) { ?>
+             <?php
+             if($subcatnew->getProductCollection()->count() > 0 ){
+              $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcatnew->getId());
+             ?> 
+            <li class="level1 nav-1-1 category-item first ui-menu-item" role="presentation"><a href="<?php echo $subCategorynew->getUrl()."?cat=".$subcatnew->getId();?>" id="ui-id-3" class="ui-corner-all" tabindex="-1" role="menuitem"><span><?php echo $subcatnew->getName();?></span></a>
+            </li>
+            <?php }}  ?>
+          </ul>
+		  <?php */ ?>
+        </li>
+      
+        
+          <li class="level0 nav-7 category-item last level-top ui-menu-item  <?php if($routeName == 'rewardpointscoupon'){echo 'active';}else{echo '';} ?>" role="presentation">
+            <a href="/rewardpointscoupon/check" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Redeem Voucher</span>
+            </a>
+        </li>
+
+        
+       
+              <?php
+              if ($routeName == 'customer') {
+                  $cls =  'active';
+              } else {
+                  $cls =  'active';
+              }
+
+              if ($controllerName == 'account') {
+                  $cls =  'active';
+              } else {
+                  $cls =  '';
+              }
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+     if($isLoggedIn) {
+
+		 ?>
+		
+ <!-- <li class="level0 nav-7 category-item last level-top ui-menu-item" role="presentation">
+            <a href="/customer/account" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>My Account</span>
+            </a>
+  </li>-->
+ <li class="level0 nav-7 category-item last level-top ui-menu-item <?php echo $cls; ?>" role="presentation">
+            <a href="/customer/account/logout/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Log Out</span>
+            </a>  
+  </li>
+
+     <?php }else{
+		 ?>
+		
+   <li class="level0 nav-7 category-item last level-top ui-menu-item <?php echo $cls; ?>" role="presentation">
+            <a href="/customer/account/login/" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span>Sign-In/Register</span>
+            </a>
+            
+       	 </li>
+<?php }
+?>
+    </ul>
+</nav>
+<div class="header__dropdowns absolute-top">
+    <div class="header__search pull-left display-on-mobil">
+        <a href="#" class="btn dropdown-toggle btn--links--dropdown header__dropdowns__button search-open"><span class="icon icon-search"></span></a>
+    </div>
+                     <?php
+      if($isLoggedIn){ ?>
+    <div class="headermenutop">
+    	
+        <ul>
+	  <li class="level0 nav-7 category-item last level-top ui-menu-item <?php echo $cls; ?>" role="presentation">
+				<a href="/customer/account" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+					<span>My Account</span>
+				</a>
+	  </li>
+        </ul>
+    
+	</div>  
+    <?php }?>  
+</div>
+
+
+<div class="overlay overlay-scale">
+<button type="button" class="overlay-close"> ✕ </button><div class="overlay__content"><form id="search-form" class="search-form outer" action="/catalogsearch/result/" method="get"><div class="input-group input-group--wd">
+<input type="text" class=" input--full" autocomplete="off" id="search" value="" name="q" placeholder="search text here ..." maxlength="128">
+<span class="input-group__bar"></span></div>
+<button type="submit" class="btn btn--wd text-uppercase wave waves-effect waves-effect">Search</button></form></div></div>
+<style type="text/css">
+ .page-header {
+    background-color: #ffffffe3;
+      margin-bottom: 0px !important;
+}
+
+@media (max-width: 768px)
+{
+  .mgz-btn-size-xl .mgz-btn {
+    font-size: 14px!important;
+    padding: 12px 20px!important;
+}
+  .mgz-element-slider .slide-buttons {
+
+    padding-bottom: 25px !important;
+}
+  .slide-heading{
+    margin-bottom: 4px !important;
+  }
+.slide-heading h2{
+  font-size: 23.484px!important;
+    line-height: 30.646px!important;
+}
+}
+@media (min-width: 769px)
+{
+  .nav-1 ul {
+    max-height: 600px;
+    column-count: 3;
+  }
+}
+
+ @media (min-width: 768px), {
+     .headermenutop li.active {
+         border-color: #ff5501;
+         border-style: solid;
+         border-width: 0 0 3px;
+         color: #333333;
+         text-decoration: none;
+         display: inline-block;
+     }
+ }
+</style>
+<script type="text/javascript">
+  require(['jquery', 'jquery/ui'], function($){
+  $(document).ready( function() {
+	  
+	$(window).scroll(function(){
+		if ($(this).scrollTop() > 50) {
+		   $('.page-header').addClass('newClass');
+		} else {
+		   $('.page-header').removeClass('newClass');
+		}
+	});
+
+  $(".search-open").click(function(){
+    $(".overlay").addClass("open");
+  });
+
+  $(".overlay-close").click(function(){
+    $(".overlay-scale").removeClass('open');
+  });
+  
+  $(document).ready(function(){
+	  
+	 if($( window ).width() > 767) 
+	 {
+		 
+	
+	  
+			 $(".ui-corner-all").click(function(){
+				  $("submenu").slideToggle("slow");
+			 });
+	 }
+});
+});
+});
+</script>

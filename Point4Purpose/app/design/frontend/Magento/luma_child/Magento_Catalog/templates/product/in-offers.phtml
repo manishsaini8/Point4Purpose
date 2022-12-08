@@ -1,0 +1,110 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+$oi = $this->getRequest()->getParam('id');
+$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
+$strUrl = 'https://api.pokitpal.com/v1/InstoreOffers/'.$oi;
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => $strUrl,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET',
+    CURLOPT_HTTPHEADER => array(
+        "Content-Type: application/json",
+        "Authorization: Bearer $token"
+    ),
+));
+
+$rsInlineOffer = curl_exec($curl);
+$rsInlineOffer = json_decode($rsInlineOffer, true);
+?>
+<div class="instore-banner" style="background-image: url('<?= $rsInlineOffer['coverShotUrl']?>');">
+<h1><?= $rsInlineOffer['offerTitle']?></h1>
+</div>
+
+    <div class="logo-container">
+        <div class="col-left">
+            <img src="<?= $rsInlineOffer['logoUrl']?>"/>
+        </div>
+        <div class="col-right">
+            <?php if(!empty($rsInlineOffer['advertiserName'])):?>
+            <div class="adv_name mb-10">
+                <label class="lb"><?= __('Offer :')?></label>
+                <?= $rsInlineOffer['advertiserName']?>
+            </div>
+            <?php endif; ?>
+            <?php if(!empty($rsInlineOffer['categoryName'])):?>
+                    <div class="categoryName mb-10">
+                        <label class="lb"><?= __('Category :')?></label>
+                        <?= $rsInlineOffer['categoryName']?>
+                    </div>
+            <?php endif; ?>
+            <?php if(!empty($rsInlineOffer['description'])):?>
+            <div class="description mb-10">
+                <label class="lb"><?= __('Description :')?></label>
+                <?= $rsInlineOffer['description']?>
+            </div>
+            <?php endif; ?>
+            <?php if(!empty($rsInlineOffer['howItWorks'])):?>
+                <div class="howItWorks mb-10">
+                    <label class="lb"><?= __('How It Works :')?></label>
+                    <?= $rsInlineOffer['howItWorks']?>
+                </div>
+            <?php endif; ?>
+            <?php if(!empty($rsInlineOffer['terms'])):?>
+            <div class="terms mb-10">
+                <label class="lb"><?= __('Terms :')?></label>
+                <?= $rsInlineOffer['terms']?>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+<?php if(!empty($rsInlineOffer['locations'])){ ?>
+
+    <iframe
+            width="1200"
+            height="300"
+            style="border:0"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBTCVb3lNWvuRY6cSKK66ftXq-vOy9VG1Q
+    &q=<?= $rsInlineOffer["locations"][0]["address"] ?>&zoom=18">
+    </iframe>
+
+   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTCVb3lNWvuRY6cSKK66ftXq-vOy9VG1Q"></script>
+<div class="mapadd">
+    <div id="googleMap" style="width:100%;height:300px;"></div>
+
+    <script>
+        var myMap;
+       // var myLatlng = new google.maps.LatLng(52.518903284520796,-1.450427753967233);
+        var myLatlng = new google.maps.LatLng(<?/*= $rsInlineOffer["locations"][0]["latitude"] */?>, <?/*= $rsInlineOffer["locations"][0]["longitude"] */?>);
+        function initialize() {
+            var mapOptions = {
+                zoom: 17,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP  ,
+                scrollwheel: false
+            }
+            myMap = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: myMap,
+                icon: 'http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png'
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>-->
+
+<!--    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBTCVb3lNWvuRY6cSKK66ftXq-vOy9VG1Q&callback=myMap" id="googleMapsApiScript" async=""></script>-->
+
+
+<?php } ?>

@@ -1,37 +1,14 @@
 <?php
+
+?>
+
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\Customer\Helper\Address;
-
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$token = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('lofcouponcode/general_settings/token');
-
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-    CURLOPT_URL => 'https://api.pokitpal.com/v1/Banks/?region=au',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'GET',
-    CURLOPT_HTTPHEADER => array(
-        "Content-Type: application/json",
-        "Authorization: Bearer $token"
-    ),
-]);
-
-$response = curl_exec($curl);
-$err = curl_error($curl);
-
-
-curl_close($curl);
-
 
 /** @var \Magento\Customer\Block\Form\Register $block */
 /** @var \Magento\Framework\Escaper $escaper */
@@ -42,26 +19,13 @@ $addressHelper = $block->getData('addressHelper');
 /** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
 $formData = $block->getFormData();
-
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
 <?php /* Extensions placeholder */ ?>
 <?= $block->getChildHtml('customer.form.register.extra') ?>
-<p style="color: #a94442;
-  background-color: #f2dede;
-
-    border-color: #faebcc;
-    padding: 15px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    text-align: center;
-    margin: 0 auto;
-    display: none;
-    width: 51%;" xmlns="http://www.w3.org/1999/html"><?= __('Registration is currently disabled as we are performing maintenance on this site!')?></p>
 <form class="form create account form-create-account"
-      action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
+      action="https://points4purpose.com.au/customer/account/createpost/"
       method="post"
       id="form-validate"
       enctype="multipart/form-data"
@@ -69,40 +33,14 @@ $formData = $block->getFormData();
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <fieldset class="fieldset create info">
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Personal Information')) ?></span></legend><br>
-<!--        <input type="hidden" name="success_url" value="<?/*= $escaper->escapeUrl($block->getSuccessUrl()) */?>">
-        <input type="hidden" id="cardsuccess" name="cardsuccess" value="" data-validate="{required:true}" required>-->
-
-         <!--- card details -->
-
-<!--         <input type="hidden" id="cardid" name="cardid" value="" data-validate="{required:true}" required>
-         <input type="hidden" id="cardnumber" name="cardnumber" value="" data-validate="{required:true}" required>
-         <input type="hidden" id="cardexpirymonth" name="cardexpirymonth" value="" data-validate="{required:true}" required>
-         <input type="hidden" id="cardexpiryyear" name="cardexpiryyear" value="" data-validate="{required:true}" required>-->
-        <input type="hidden" id="usertoken" name="usertoken" value="d833a82260374a23afa4b89d25e928e8">
-         <!--  card details -->
-
-        <input type="hidden" name="error_url" value="<?= $escaper->escapeUrl($block->getErrorUrl()) ?>">
+                <input type="hidden" id="usertoken" name="usertoken" value="d833a82260374a23afa4b89d25e928e8">
+        <input type="hidden" id="tst" name="test" value="1">
+        <!--  card details -->
         <?= $block->getLayout()
-                ->createBlock(\Magento\Customer\Block\Widget\Name::class)
-                ->setObject($formData)
-                ->setForceUseCustomerAttributes(true)
-                ->toHtml() ?>
-        <?php if ($block->isNewsletterEnabled()): ?>
-            <div class="field choice newsletter">
-                <input type="checkbox"
-                       name="is_subscribed"
-                       title="<?= $escaper->escapeHtmlAttr(__('Receive offers from our participating Business and Charities')) ?>"
-                       value="1"
-                       id="is_subscribed"
-                       checked="checked"
-                       class="checkbox">
-                <label for="is_subscribed" class="label">
-                    <span><?= $escaper->escapeHtml(__('Receive offers from our participating Business and Charities')) ?></span>
-                </label>
-            </div>
-            <?php /* Extensions placeholder */ ?>
-            <?= $block->getChildHtml('customer.form.register.newsletter') ?>
-        <?php endif ?>
+            ->createBlock(\Magento\Customer\Block\Widget\Name::class)
+            ->setObject($formData)
+            ->setForceUseCustomerAttributes(true)
+            ->toHtml() ?>
 
         <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
         <?php if ($_dob->isEnabled()): ?>
@@ -144,7 +82,7 @@ $formData = $block->getFormData();
             <?php endif ?>
 
             <?php
-                $_streetValidationClass = $addressHelper->getAttributeValidationClass('street');
+            $_streetValidationClass = $addressHelper->getAttributeValidationClass('street');
             ?>
 
             <div class="field street required">
@@ -160,8 +98,8 @@ $formData = $block->getFormData();
                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php
-                            $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
-                            $streetLines = $addressHelper->getStreetLines();
+                        $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
+                        $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>
                             <div class="field additional">
@@ -257,7 +195,7 @@ $formData = $block->getFormData();
     <?php endif; ?>
     <fieldset class="fieldset create account"
               data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
-        <legend class="legend"><span><?= $escaper->escapeHtml(__('Sign-In Information')) ?></span></legend><br>
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Sign-in Information')) ?></span></legend><br>
         <div class="field required">
             <label for="email_address" class="label"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
@@ -270,7 +208,6 @@ $formData = $block->getFormData();
                        class="input-text"
                        data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}">
-                <span class="em-error" style="color: red;display: none;">enter valid email</span>
             </div>
         </div>
         <div class="field password required">
@@ -280,9 +217,9 @@ $formData = $block->getFormData();
                        title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
                        class="input-text"
                        data-password-min-length="<?=
-                        $escaper->escapeHtmlAttr($block->getMinimumPasswordLength()) ?>"
+                       $escaper->escapeHtmlAttr($block->getMinimumPasswordLength()) ?>"
                        data-password-min-character-sets="<?=
-                        $escaper->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
+                       $escaper->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
                        data-validate="{required:true, 'validate-customer-password':true}"
                        autocomplete="off">
                 <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite" style="display:none;">
@@ -309,95 +246,17 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
-		<input type="hidden" id="card_token" name="card_token" value="" data-validate="{required:true}" required>
-                    <input type="hidden" id="pokitpal_user_id" name="pokitpal_user_id" value="" data-validate="{required:true}" required>
-
-        <!--div class="payment-sec">
-            <div class="card">
-                <legend class="legend"><span><?= $escaper->escapeHtml(__('Preferred Payment Card Information')) ?></span></legend>
-                <span class="card-note">You can register up to 4 payment cards with your membership (Visa, MasterCard or Debit Card).</span>
-            </div>
-            <br/>
-        </div>
-            <div class="field">
-                <label for="password-confirmation" class="label">
-                    <span><?= $escaper->escapeHtml(__('Card Number')) ?></span>
-                </label>
-                <div class="control">
-                    
-                    <input type="number" id="cardnumber" class="input-text required-entry validate-length maximum-length-16 minimum-length-16 validate-digits"
-                           name="cardnumber" value="" data-validate="{required:true}" required>
-                    <span class="card-error" style="display: none;color: red;">Invalid Card Number</span>
-                </div>
-            </div>
-            <div class="exp" style="display: flex">
-
-                <div class="field">
-                    <label for="password-confirmation" class="label">
-                        <span><?= $escaper->escapeHtml(__('Card Expiry Month')) ?></span>
-                    </label>
-                    <div class="control">
-                        <input type="number" id="cardexpirymonth"  class="input-text required-entry validate-length maximum-length-2 minimum-length-2 validate-digits"  name="cardexpirymonth" value="" data-validate="{required:true}" required>
-                        <span class="info">eg. 05</span>
-                        <span class="expm-error" style="display: none;color: red;">Invalid Card Month</span>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label for="password-confirmation" class="label">
-                        <span><?= $escaper->escapeHtml(__('Card Expiry Year')) ?></span>
-                    </label>
-                    <div class="control">
-                        <input type="number" id="cardexpiryyear" name="cardexpiryyear" value="" class="input-text required-entry validate-length maximum-length-2 minimum-length-2 validate-digits" data-validate="{required:true}" required>
-                        <span class="info">Last 2 digits eg. 23 (year : 2023)</span>
-                        <span class="expy-error" style="display: none;color: red;">Invalid Card Year</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <?php
-            if(empty($err)){
-            $banks = json_decode($response, true);
-            if (!empty($banks) && count($banks) > 0) { ?>
-
-                    <br/>
-            <div class="field">
-                <label for="password-confirmation" class="label">
-                    <span><?= $escaper->escapeHtml(__('Select Bank')) ?></span>
-                </label>
-                <div class="control">
-                    <select name="bank" class="form-select required-entry">
-                        <?php foreach ($banks['banks'] as $bnk){ ?>
-                        <option value="<?= $bnk['id'] ?>"><?= $bnk['name'] ?></option>
-                       <?php }?>
-                    </select>
-                </div>
-            </div>
-            <?php }} ?>
-
-
-        <div class="primary card register-prm" style="display: none">
-            <span class="action submit primary"
-                    id="card_form"
-                <span><?= $escaper->escapeHtml(__('Register Card')) ?></span>
-            </span>
-        </div-->
-<div class="mggs">
-
-        </div>
-        
     </fieldset>
     <fieldset class="fieldset additional_info">
         <?= $block->getChildHtml('form_additional_info') ?>
-        <p class="field">By completing registration, you agree to accept our <a target="_blank" href="<?= $this->getBaseUrl() ?>terms-and-conditions/" class="tc-link">terms and conditions</a>.</p>
         <div class="actions-toolbar">
             <div class="primary">
-                <span class="action submit primary"
+                <button type="submit"
+                        class="action submit primary"
                         id="my-button"
                         title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>">
                     <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
-                </span>
+                </button>
             </div>
             <div class="secondary">
                 <a class="action back"
@@ -406,11 +265,8 @@ $formData = $block->getFormData();
                 </a>
             </div>
         </div>
-
     </fieldset>
-
 </form>
-
 
 
 
@@ -423,6 +279,7 @@ require([
 
     var dataForm = $('#form-validate');
     var ignore = {$ignore};
+
     dataForm.mage('validation', {
 script;
 if ($_dob->isEnabled()):
@@ -458,9 +315,7 @@ script;
     $regionId = (int) $formData->getRegionId();
     $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
-
-
-<script type="text/x-magento-init">
+    <script type="text/x-magento-init">
     {
         "#country": {
             "regionUpdater": {
@@ -493,31 +348,18 @@ script;
     }
 </script>
 
-<?php
 
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$customercollection = $objectManager->create('Magento\Customer\Model\Customer')->getCollection()
-               ->addAttributeToSelect("*")
-               ->addAttributeToSort('entity_id','desc');
-
-$lastcst=$customercollection->getFirstItem();
-$newidalloted = intval($lastcst->getEntityId())+1;
-    // echo $newidalloted;
-     // echo $lastcst->getEntityId();
-
-
-?>
 <style>
-     .cardscontent, .cardscontent div {
-    margin: 0 auto; }
-     .cardscontent img {
-    max-width: 60px;
-    height: auto;
-    border: 0;
-}
- #anchor-id  form> div:last-child {
-      display:none !important;
-    } 
+    .cardscontent, .cardscontent div {
+        margin: 0 auto; }
+    .cardscontent img {
+        max-width: 60px;
+        height: auto;
+        border: 0;
+    }
+    #anchor-id  form> div:last-child {
+        display:none !important;
+    }
 
     #anchor-id div{
         margin-left: 0px !important;
@@ -528,208 +370,35 @@ $newidalloted = intval($lastcst->getEntityId())+1;
     }
     #anchor-id:after{
         margin: 10px 0 0;
-    content: attr(data-hasrequired);
-    display: block;
-    letter-spacing: normal;
-    word-spacing: normal;
-    color: #e02b27;
-    font-size: 1.2rem;
-}
+        content: attr(data-hasrequired);
+        display: block;
+        letter-spacing: normal;
+        word-spacing: normal;
+        color: #e02b27;
+        font-size: 1.2rem;
+    }
 
-.customer-account-create .column.main{
-    position:relative;
-    padding-bottom:230px !important
-}
-.customer-account-create .column.main .additional_info{
-    position:absolute;
-    bottom: 30px;
-}
-.customer-account-create .column.main .additional_info .field{
-    margin-bottom:10px;
-}
-.customer-account-create .column.main .field .label{
-    font-weight:bold;
-    margin-bottom:8px;
-    display:inline-block;
-}
-.customer-account-create .column.main .field .label:after{
-    content:"*";
-    color: #E02B27;
-    font-size: 1.2rem;
-    margin: 0 0 0 5px;
-}
-
-#card_form{
-    background-color: #fff !important;
-    color: #000;
-    border-color: #000 !important;
-    opacity: 1;
-    padding: 3px;
-    font-size: revert;
-}
+    .customer-account-create .column.main{
+        position:relative;
+        padding-bottom:230px !important
+    }
+    .customer-account-create .column.main .additional_info{
+        position:absolute;
+        bottom: 30px;
+    }
+    .customer-account-create .column.main .additional_info .field{
+        margin-bottom:10px;
+    }
+    .customer-account-create .column.main .field .label{
+        font-weight:bold;
+        margin-bottom:8px;
+        display:inline-block;
+    }
+    .customer-account-create .column.main .field .label:after{
+        content:"*";
+        color: #E02B27;
+        font-size: 1.2rem;
+        margin: 0 0 0 5px;
+    }
 </style>
 
-<script type="text/javascript">
-    require([
-        "jquery",
-    ],function($) {
-        $(document).ready(function() {
-            $("#my-button").on("click",function() {
-                let isChecked = $('.mage-error').is(':checked');
-                if ($('#form-validate').valid()) {
-
-                    if(isChecked === false){
-                        $('.g-recaptcha-error').show();
-                        return false;
-                    }else{
-                        $('.g-recaptcha-error').hide();
-                       // $('.register-prm #card_form').trigger('click');
-                        cardRegister()
-                    }
-
-                }else{
-
-                    if(isChecked === false){
-                        $('.g-recaptcha-error').show();
-                        return false;
-                    }else{
-                        $('.g-recaptcha-error').hide();
-                    }
-
-                    return false;
-                }
-            });
-            })
-
-        function cardRegister()
-        {
-           var email = $('#email_address').val()
-            /*  $('#card_form').click(function() {*/
-            /*var cardNumber = $('#cardnumber').val().length;
-            var cardMn = $('#cardexpirymonth').val().length;
-            var cardYr = $('#cardexpiryyear').val().length;
-            
-
-            var cardMonth = $('#cardexpirymonth').val();
-            var cardYear = $('#cardexpiryyear').val();*/
-
-            /*if(cardNumber === 0 || cardNumber > 16 || cardNumber < 16){
-                // console.log(cardNumber);
-                $('.card-error').show();
-                return false;
-            }else{
-                $('.card-error').hide();
-            }
-
-            if(cardMn === 0 || cardMn > 2 || cardMn < 2){
-                $('.expm-error').show();
-                return false;
-            }else{
-                $('.expm-error').hide();
-            }
-
-            if(cardMonth > 12 || cardMonth == '00'){
-                $('.expm-error').show();
-                return false;
-            }else{
-                $('.expm-error').hide();
-            }
-
-            if(cardYr === 0 || cardYr > 2 || cardYr < 2){
-                $('.expy-error').show();
-                return false;
-            }else{
-                $('.expy-error').hide();
-            }
-
-            if(cardYear <= 21 || cardYear > 50 || cardMonth == '00'){
-                $('.expy-error').show();
-                return false;
-            }else{
-                $('.expy-error').hide();
-            }*/
-
-            if(email === ''){
-                $('.em-error').show();
-                return false;
-            }else{
-                $('.em-error').hide();
-            }
-
-            if(IsEmail(email)==false){
-                $('.em-error').show();
-                return false;
-            }else{
-                $('.em-error').hide();
-            }
-
-            $.ajax({
-                url: "<?php echo $this->getBaseUrl().'rewardpointscoupon/check/cardregister'?>",
-                data: $('#form-validate').serialize(),
-                type: 'POST',
-                //dataType: 'json',
-                showLoader: true,
-                success: function(data, status, xhr) {
-                    $('.mggs').empty();
-                    if (data.status === 'error') {
-                        $('.mggs').append('<div class="message error">'+data.message+'<div>');
-                    }else{
-                        $('div.primary.card').hide();
-                        //$('.mggs').html('<div class="message success">'+data.message+'<div>');
-						//alert(data.card_token);
-                        $('.customer-account-create #card_token').val(data.card_token);
-                        $('.customer-account-create #pokitpal_user_id').val(data.pokitpal_uid);
-                       // $(".form-create-account").submit();
-                        /*  setTimeout(function() {
-                              window.location.href = 'https://points4purpose.com.au/customer/account/'
-                          }, 2500);*/
-					//	  alert('hehre');
-							 //  return false;
-                        $.ajax({
-                            type: "post",
-                            url: $('#form-validate').attr('action'),
-                            data: $('#form-validate').serialize(),
-                            showLoader: true,
-                            success:  function(data){
-                                window.location.href = $(location).attr('hostname') + '/customer/account/';
-                            }
-                        });
-                    }
-                    }
-            });
-
-
-        }
-
-        function IsEmail(email) {
-            var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if(!regex.test(email)) {
-                return false;
-            }else{
-                return true;
-            }
-        }
-
-
-        });
-
-
-
-</script>
-
-
-<script type="text/javascript">
-    require(['jquery', 'jquery/ui'], function($){
-        jQuery(document).ready( function() {
-            $(".create.account .password #password").on("keyup change", function(e) {
-                if($('.create.account .password #password-strength-meter-container').css('display') == 'none') {
-                    $('.create.account .password #password-strength-meter-container').show();
-                }
-                if ($(".create.account .password #password").val() == '') {
-                    $('.create.account .password #password-strength-meter-container').hide();
-                    $('.create.account .password #password-error').hide();
-                }
-            });
-        });
-    });
-</script>

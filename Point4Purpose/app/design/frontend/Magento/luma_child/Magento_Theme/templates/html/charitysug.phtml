@@ -1,0 +1,122 @@
+<?php
+
+?>
+<div class="charity-form">
+	<div class="page-title">
+		<h3><?= __('Please Enter your suggested charrity') ?></h3>
+	
+	</div>
+	<div class="form-section">
+		<form class="form charity" action="<?= $this->getUrl('charity/index/index') ?>" method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off" onsubmit="return capatcheFunction()">
+			<?php echo $block->getBlockHtml('formkey')?>
+			<fieldset class="fieldset">
+				<legend class="legend"><span><?= __('About you') ?></span></legend><br>
+				<div class="field">
+		            <label class="label" for="name"><span><?= __('Your Name') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="name" name="name" title="Your Name" class="input-text required-entry" data-validate="{required:false}" autocomplete="off">
+		            </div>
+		        </div>
+		  
+		        <div class="field">
+		            <label class="label" for="email"><span><?= __('Email Address') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="email" name="email" title="Email Address" class="input-text required-entry" data-validate="{required:false}" autocomplete="off">
+		            </div>
+		        </div>
+		   
+
+		        <legend class="legend"><span><?= __('Your Suggested Charrity') ?></span></legend><br>
+		        <div class="field required">
+		            <label class="label" for="org_name"><span><?= __('Charity Name') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="org_name" name="org_name" title="Organisation Name" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="website_url"><span><?= __('Website URL') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="website_url" name="website_url" title="Website URL" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>>
+		        <div class="field required">
+		            <label class="label" for="charitytype"><span><?= __('Please select the category that applies to your charity') ?><?= __('(CTRL CLICK TO SELECT MULTIPLE)') ?></span></label>
+		            <div class="control">
+		                <select class="required-entry" id="charitytype" name="charitytype[]" multiple="multiple" size="10">
+		                	<option value="" disabled="" selected="">Please Select</option>
+		                	<option value="Arts, Culture & Humanities"><?= __('Arts, Culture & Humanities') ?></option>
+		                	<option value="Civil Rights, Social Action & Advocacy"><?= __('Civil Rights, Social Action & Advocacy') ?></option>
+		                	<option value="Crime & Legal-Related"><?= __('Crime & Legal-Related') ?></option>
+		                	<option value="Diseases, Disorders & Medical Disciplines"><?= __('Diseases, Disorders & Medical Disciplines') ?></option>
+		                	<option value="Education"><?= __('Education') ?></option>
+		                	<option value="Employment"><?= __('Employment') ?></option>
+		                	<option value="Environment"><?= __('Environment') ?></option>
+		                	<option value="Food, Agriculture & Nutrition"><?= __('Food, Agriculture & Nutrition') ?></option>
+		                	<option value="Health Care"><?= __('Health Care') ?></option>
+		                	<option value="Housing & Shelter"><?= __('Housing & Shelter') ?></option>
+		                	<option value="Human Services"><?= __('Human Services') ?></option>
+		                	<option value="International, Foreign Affairs & National Security"><?= __('International, Foreign Affairs & National Security') ?></option>
+		                	<option value="Medical Research"><?= __('Medical Research') ?></option>
+		                	<option value="Mental Health & Crisis Intervention"><?= __('Mental Health & Crisis Intervention') ?></option>
+		                	<option value="Philanthropy, Voluntarism & Grantmaking Foundations"><?= __('Philanthropy, Voluntarism & Grantmaking Foundations') ?></option>
+		                	<option value="Public & Social Benefit"><?= __('Public & Social Benefit') ?></option>
+		                	<option value="Public Safety, Disaster Preparedness & Relief"><?= __('Public Safety, Disaster Preparedness & Relief') ?></option>
+		                	<option value="Recreation & Sports"><?= __('Recreation & Sports') ?></option>
+		                	<option value="Religion Related"><?= __('Religion Related') ?></option>
+		                	<option value="Science & Technology"><?= __('Science & Technology') ?></option>
+						</select>
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="howhear"><span><?= __('How did you hear about points4purpose?') ?></span></label>
+		            <div class="control">
+		                <select class="required-entry" id="howhear" name="howhear">
+		                	<option value="" disabled="" selected="">Please Select</option>
+		                	<option value="Word of mouth">Word of mouth</option>
+		                	<option value="Google Search">Google Search</option>
+		                	<option value="Social media">Social media</option>
+		                	<option value="Conference or event">Conference or event</option>
+		                	<option value="Saw another charity or corporate using P4P">Saw another charity or corporate using P4P</option>
+		                	<option value="I have my own P4P account">I have my own P4P account</option>
+		                	<option value="Email from P4P">Email from P4P</option>
+		                	<option value="Other">Other</option>
+						</select>
+		            </div>
+		        </div>
+			</fieldset>
+			<div class="field recaptcha">
+			<div class="g-recaptcha" name="recaptcha" id="recaptcha" data-sitekey="6LdI8sAdAAAAAKeJfAhSEvEcdwdwxRZgYbGA4e14"></div>
+			</div>
+			<div class="actions-toolbar">
+		        <div class="primary">
+		            <button type="submit" class="action submit primary" title="<?= __('Submit') ?>">
+		                <span><?= __('Submit') ?></span>
+		            </button>
+		        </div>
+		    </div>
+
+		    <div class="field">
+		    	<h4><?= __('Thanks for your suggestion') ?></h4>
+		    
+		    </div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function capatcheFunction() {
+    var exists = document.getElementById("g-recaptcha-response");
+    if(exists == null){
+
+    } else{
+        var check = document.getElementById("g-recaptcha-response").value;
+        if(check=='' || check == null){
+            document.getElementById("recaptcha").style.border = "1px solid #ea0e0e";
+            return false;
+        }
+        else{
+            document.getElementById("recaptcha").style.border = "none";
+            return true;
+        }
+    }
+}
+</script>

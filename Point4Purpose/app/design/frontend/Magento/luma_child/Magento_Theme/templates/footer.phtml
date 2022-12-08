@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+ $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+    // if($customerSession->isLoggedIn()) { 
+	// echo "test";
+	// }else{
+	//	echo "test 1"; 
+		 
+	// }
+?>
+<style>
+	.page-footer {
+    padding-bottom: 0px !important;
+}
+</style>
+<?php
+$host = $_SERVER['SERVER_NAME'];
+?>
+<div class="footer content">
+	
+		<!-- <?php echo $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setTemplate("Magento_Newsletter::subscribe.phtml")->toHtml();?> -->
+
+		<?php echo $this->getLayout() ->createBlock('Magento\Cms\Block\Block')->setBlockId('footer_links_block')->toHtml();
+?>
+	<!-- <ul class="footer links">
+		<li class="nav item">
+			<a href="/privacy-policy">Privacy Notice</a>
+		</li>
+		<li class="nav item">
+			<a href="/terms-and-conditions">Terms & Conditions</a>
+		</li>
+		<li class="nav item">
+				<a href="/contact">Contact Us</a>
+		</li>
+	</ul> -->
+	
+</div>
+<small class="copyright">
+    <span><?= $block->escapeHtml($block->getCopyright()) ?></span>
+</small>
+
+
+<style type="text/css">
+.form.subscribe	{
+	display: none !important;
+}
+.contact-index-index .actions-toolbar .action:last-child{
+	background: #0096a5;
+    color: white;
+}
+.catalog-category-view .breadcrumbs li.item, .breadcrumbs li a{
+	color: #0096a5 !important;
+}
+.customer-account-login .login-container .actions-toolbar .action.login.primary,
+.customer-account-create .form-create-account .actions-toolbar .action.submit.primary,
+.customer-account-login .login-container .actions-toolbar .action.create.primary{
+	background: #0096a5;
+    color: white;
+}
+.customer-account-login .login-container .secondary .action.remind,
+.customer-account-create .form-create-account .tc-link,
+.customer-account-index .block-dashboard-info .action.edit,
+.customer-account-index .block-dashboard-info .action.change-password,
+.rewardpoints-customer-points .reward-points-description a{
+	color: #0096a5;
+}
+.customization-points4purpose-payment #anchorid form> div:nth-last-child(2) button,
+.customer-account-create #anchor-id  form> div:nth-last-child(2) button{
+	background: #0096a5 !important;
+    color: white !important;
+}
+
+</style>
+
+<script type="text/javascript">
+   /* require(['jquery', 'jquery/jquery-storageapi'], function($) {
+        $.cookieStorage.set('mage-messages', '');
+    });*/
+
+    require([
+        'jquery'
+    ], function(jQuery){
+
+        (function($) {
+            $('.customer-account-login .form-login #send2').hide();
+            $('.customer-account-edit .form-edit-account .save.primary').hide();
+            $('.customer-account-forgotpassword .form.password.forget .submit.primary').hide();
+            $('.customer-account-create #my-button').hide();
+            $(window).load(function(){
+                setTimeout(function () {
+                    $('.customer-account-login .form-login #send2').show();
+                    $('.customer-account-edit .form-edit-account .save.primary').show();
+                    $('.customer-account-forgotpassword .form.password.forget .submit.primary').show();
+                    $('.customer-account-create #my-button').show();
+                }, 2000);
+            });
+        })(jQuery);
+    });
+</script>

@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ * AAAJ Modified core here
+ */
+
+/** This changes need to valid applying filters and configuration before search process is started. */
+$productList = $block->getProductListHtml();
+?>
+<?php if ($block->getResultCount()) : ?>
+    <?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
+<div class="search results">
+    <?php if ($messages = $block->getNoteMessages()) : ?>
+    <div class="message notice">
+        <div>
+            <?php foreach ($messages as $message) : ?>
+                <?= /* @noEscape */ $message ?><br />
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <div class="bk-url">
+       <!-- <a href="#" onClick="Javascript:history.back();">--><a href="javascript:history.go(-1)"><?= __('Back') ?></a>
+    </div>
+    <?= /* @noEscape */ $productList ?>
+</div>
+<?php else : ?>
+
+<div class="message notice">
+    <div>
+        <p>To suggest a charity please click <a href="/charitysuggestion">here</a></p>
+        <?= /* @noEscape */ $block->getAdditionalHtml() ?>
+        <?php if ($messages = $block->getNoteMessages()) : ?>
+            <?php foreach ($messages as $message) : ?>
+                <br /><?= /* @noEscape */ $message ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<div class="bk-url-down">
+    <a href="javascript:history.go(-1)"><?= __('Back') ?></a>
+</div>
+
+<script type="text/javascript">
+
+<?php $catid =  $this->getRequest()->getParam('cat');?>
+	
+	window.addEventListener("load", function(){
+		setTimeout(function(){
+			
+			<?php if($catid=='682'){?>
+		//	alert('charity');
+				jQuery('.am-filter-items-attr_category_ids li.item.-filter-parent:nth-child(2)').hide();
+			<?php } else {		
+				?>
+			//	alert('shop');
+				jQuery('.am-filter-items-attr_category_ids li.item.-filter-parent:nth-child(1)').hide();
+			<?php }?>
+			
+		
+	 	}, 500);
+	});
+
+	
+</script>

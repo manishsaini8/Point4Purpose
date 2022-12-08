@@ -1,0 +1,232 @@
+<?php
+
+?>
+
+<style>
+	.control::before {
+   display:none !important;
+}
+	.card {
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    width: 50%;
+    margin: 0 auto;
+}
+	.card--form {
+    background: #ffffff;
+    border-color: #f0f0f0;
+    padding: 20px 45px 0;
+    text-align: center;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+}
+	
+	.legend{
+		border-bottom:0;
+	}
+	
+	.legend span{
+		font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size: 1.231em;
+    padding: 0 0 1.2em;
+    margin: 0;
+	text-transform: uppercase;
+	}
+	
+	.page-title h3{
+	  margin-top: 25px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1.692em;
+    padding: 0 0 1.5em;
+    margin: 0;
+	text-align: center;
+    padding-bottom: 10px!important;
+	}
+	.page-title h4 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size: 1.077em;
+    padding: 0 0 1em;
+    margin: 0;
+	text-align: center;
+}
+	
+.recaptcha {
+    margin: 0 auto 15px auto;
+    width: 50%;
+}
+	
+.submit{
+    display: block !important;
+    float: none !important;
+    width: 100px !important;
+    margin: 0 auto !important;
+}
+	
+.btn.btn--wd {
+    color: #ffffff;
+    padding: 8px 18px;
+    background: rgb(0, 150, 165);
+    border-radius: 3px;
+    font-size: 16.5px;
+    font-family: 'Open Sans', 'Helvetica Neue';
+}
+	
+	.actions-toolbar .primary{
+		display:block !important;
+		float: none !important;
+	}
+	
+</style>
+<div class="charity-form">
+	<div class="page-title">
+		<h3><?= __('Thank you for joining points4purpose!') ?></h3>
+		<h4><?= __('Please enter the following information to create your account.') ?></h4>
+	</div>
+	<div class="form-section card card--form">
+		<form class="form charity" action="<?= $this->getUrl('customization/charity/index') ?>" method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off" onsubmit="return capatcheFunction()">
+			<?php echo $block->getBlockHtml('formkey')?>
+			<fieldset class="fieldset">
+				<legend class="legend"><span><?= __('About you') ?></span></legend><br>
+				<div class="field required">
+		            <label class="label" for="name"><span><?= __('Your Name') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="name" name="name" title="Your Name" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="position"><span><?= __('Position') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="position" name="position" title="Position" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="email"><span><?= __('Email Address') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="email" name="email" title="Email Address" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="phone_number"><span><?= __('Phone number') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="phone_number" name="phone_number" title="Phone number" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+
+		        <legend class="legend"><span><?= __('About your cause') ?></span></legend><br>
+		        <div class="field required">
+		            <label class="label" for="org_name"><span><?= __('Organisation Name') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="org_name" name="org_name" title="Organisation Name" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="orgabn"><span><?= __('Organisation ABN') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="orgabn" name="orgabn" title="Organisation ABN" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="website_url"><span><?= __('Website URL') ?></span></label>
+		            <div class="control">
+		                <input type="text" id="website_url" name="website_url" title="Website URL" class="input-text required-entry" data-validate="{required:true}" autocomplete="off">
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="dgrstatus"><span><?= __('DGR Status (Does my organisation provide tax deductible receipts?)') ?></span></label>
+		            <div class="control">
+		                <select class="required-entry" id="dgrstatus" name="dgrstatus">
+		                	<option>Please Select</option>
+		                	<option value="yes">Yes</option>
+		                	<option value="no">No</option>
+						</select>
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="charitytype"><span><?= __('Please select the category that applies to your charity') ?><?= __('(CTRL CLICK TO SELECT MULTIPLE)') ?></span></label>
+		            <div class="control">
+		                <select class="required-entry" id="charitytype" name="charitytype[]" multiple="multiple" size="10">
+		                	<option value="" disabled="" selected="">Please Select</option>
+		                	<option value="Arts, Culture & Humanities"><?= __('Arts, Culture & Humanities') ?></option>
+		                	<option value="Civil Rights, Social Action & Advocacy"><?= __('Civil Rights, Social Action & Advocacy') ?></option>
+		                	<option value="Crime & Legal-Related"><?= __('Crime & Legal-Related') ?></option>
+		                	<option value="Diseases, Disorders & Medical Disciplines"><?= __('Diseases, Disorders & Medical Disciplines') ?></option>
+		                	<option value="Education"><?= __('Education') ?></option>
+		                	<option value="Employment"><?= __('Employment') ?></option>
+		                	<option value="Environment"><?= __('Environment') ?></option>
+		                	<option value="Food, Agriculture & Nutrition"><?= __('Food, Agriculture & Nutrition') ?></option>
+		                	<option value="Health Care"><?= __('Health Care') ?></option>
+		                	<option value="Housing & Shelter"><?= __('Housing & Shelter') ?></option>
+		                	<option value="Human Services"><?= __('Human Services') ?></option>
+		                	<option value="International, Foreign Affairs & National Security"><?= __('International, Foreign Affairs & National Security') ?></option>
+		                	<option value="Medical Research"><?= __('Medical Research') ?></option>
+		                	<option value="Mental Health & Crisis Intervention"><?= __('Mental Health & Crisis Intervention') ?></option>
+		                	<option value="Philanthropy, Voluntarism & Grantmaking Foundations"><?= __('Philanthropy, Voluntarism & Grantmaking Foundations') ?></option>
+		                	<option value="Public & Social Benefit"><?= __('Public & Social Benefit') ?></option>
+		                	<option value="Public Safety, Disaster Preparedness & Relief"><?= __('Public Safety, Disaster Preparedness & Relief') ?></option>
+		                	<option value="Recreation & Sports"><?= __('Recreation & Sports') ?></option>
+		                	<option value="Religion Related"><?= __('Religion Related') ?></option>
+		                	<option value="Science & Technology"><?= __('Science & Technology') ?></option>
+						</select>
+		            </div>
+		        </div>
+		        <div class="field required">
+		            <label class="label" for="howhear"><span><?= __('How did you hear about points4purpose?') ?></span></label>
+		            <div class="control">
+		                <select class="required-entry" id="howhear" name="howhear">
+		                	<option value="" disabled="" selected="">Please Select</option>
+		                	<option value="Word of mouth">Word of mouth</option>
+		                	<option value="Google Search">Google Search</option>
+		                	<option value="Social media">Social media</option>
+		                	<option value="Conference or event">Conference or event</option>
+		                	<option value="Saw another charity or corporate using P4P">Saw another charity or corporate using P4P</option>
+		                	<option value="I have my own P4P account">I have my own P4P account</option>
+		                	<option value="Email from P4P">Email from P4P</option>
+		                	<option value="Other">Other</option>
+						</select>
+		            </div>
+		        </div>
+			</fieldset>
+			<div class="field recaptcha">
+			<div class="g-recaptcha" name="recaptcha" id="recaptcha" data-sitekey="6LdI8sAdAAAAAKeJfAhSEvEcdwdwxRZgYbGA4e14"></div>
+			</div>
+
+			<div class="actions-toolbar">
+		        <div class="primary">
+		            <button type="submit" class="action submit btn btn--wd" title="<?= __('Submit') ?>">
+		                <span><?= __('Submit') ?></span>
+		            </button>
+		        </div>
+		    </div>
+
+		    <div class="field">
+		    	<h4><?= __('Who can use points4purpose?') ?></h4>
+		    	<p>To receive donations through points4purpose, you need to be a registered charity, non-profit or community organisation.<br>If you are an individual wishing to support an organisation that is not listed on points4purpose, please contact the organisation directly.</p>
+		    </div>
+
+			
+			
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+function capatcheFunction() {
+    var exists = document.getElementById("g-recaptcha-response");
+    if(exists == null){
+
+    } else{
+        var check = document.getElementById("g-recaptcha-response").value;
+        if(check=='' || check == null){
+            document.getElementById("recaptcha").style.border = "1px solid #ea0e0e";
+            return false;
+        }
+        else{
+            document.getElementById("recaptcha").style.border = "none";
+            return true;
+        }
+    }
+}
+</script>
